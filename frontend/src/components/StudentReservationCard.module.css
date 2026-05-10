@@ -1,0 +1,640 @@
+/* ── Student reservation card (shared) ─────────────────────────────
+   Editorial layout for the My Reservations list AND the Home upcoming
+   preview:
+   - vertical accent rail on the far left, colour-coded by status
+   - calendar stamp (weekday • day • month) inside the rail column
+   - body shows professor identity at the top, topic as headline,
+     a time chip + optional student note on the meta row
+   - cancelled rows are kept on screen as visible tombstones with
+     muted ink, a strike-through topic, and no cancel control
+*/
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 6px 76px 1fr auto;
+  align-items: stretch;
+  column-gap: 20px;
+  padding: 20px 22px 20px 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  transition: transform 220ms var(--ease), box-shadow 220ms var(--ease),
+    border-color 220ms var(--ease);
+  animation: riseIn 420ms var(--ease) both;
+}
+
+.card::before {
+  /* Faint cross-hatch flourish in the top-right corner. Reads as a
+     watermark / official-letterhead detail rather than decoration. */
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 96px;
+  height: 96px;
+  background: radial-gradient(
+    circle at top right,
+    color-mix(in srgb, var(--accent-soft) 65%, transparent) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-2);
+}
+
+.cardRail {
+  grid-column: 1;
+  align-self: stretch;
+  background: var(--ink-4);
+  width: 6px;
+}
+
+.cardBooked .cardRail {
+  background: linear-gradient(
+    180deg,
+    var(--accent) 0%,
+    var(--accent-deep) 100%
+  );
+}
+
+.cardCancelled .cardRail {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--danger) 0,
+    var(--danger) 4px,
+    color-mix(in srgb, var(--danger) 55%, transparent) 4px,
+    color-mix(in srgb, var(--danger) 55%, transparent) 8px
+  );
+}
+
+.cardGroup {
+  background: linear-gradient(
+    115deg,
+    var(--paper) 0%,
+    color-mix(in srgb, var(--sage-soft) 35%, var(--paper)) 100%
+  );
+}
+
+.cardGroup .cardRail {
+  background: linear-gradient(180deg, var(--sage) 0%, #2a4a36 100%);
+}
+
+.cardCancelled {
+  background: color-mix(in srgb, var(--danger-soft) 30%, var(--paper));
+}
+
+.cardPast {
+  background: color-mix(in srgb, var(--ink-4) 18%, var(--paper));
+}
+
+.cardPast .cardRail {
+  background: var(--ink-4);
+}
+
+.cardPast .cardStampDay {
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  color: var(--ink-3);
+  -webkit-text-fill-color: var(--ink-3);
+}
+
+.cardPast .cardStampWeek,
+.cardPast .cardStampMonth {
+  color: var(--ink-4);
+}
+
+.cardPast .cardTopic {
+  color: var(--ink-3);
+}
+
+.cardPast .profAvatar {
+  background: var(--ink-3);
+  box-shadow: none;
+}
+
+.cardPast .timeChip {
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  border-color: var(--line);
+}
+
+.cardPast .timeChip svg {
+  color: var(--ink-4);
+}
+
+/* Compact variant — used by Home for the upcoming preview. Same visual
+   language, just tighter so three cards fit comfortably under the
+   "Upcoming sessions" rule without dominating the page. */
+.cardCompact {
+  padding: 16px 18px 16px 0;
+  column-gap: 16px;
+  grid-template-columns: 5px 64px 1fr auto;
+}
+
+.cardCompact .cardStampDay {
+  font-size: 30px;
+}
+
+.cardCompact .cardTopic {
+  font-size: 18px;
+}
+
+.cardStamp {
+  grid-column: 2;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 0;
+  border-right: 1px dashed var(--line);
+  margin: 6px 0;
+}
+
+.cardStampWeek {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.cardStampDay {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--ink);
+  margin-top: 2px;
+  /* Subtle gold-ink wash on the calendar stamp number. Adds a
+     publication / press feel without coloring the digit cartoonishly. */
+  background: linear-gradient(
+    180deg,
+    var(--ink) 0%,
+    color-mix(in srgb, var(--ink) 65%, var(--accent-deep)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cardStampMonth {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-top: 2px;
+}
+
+.cardCancelled .cardStampDay,
+.cardCancelled .cardStampMonth,
+.cardCancelled .cardStampWeek {
+  color: var(--ink-3);
+  -webkit-text-fill-color: var(--ink-3);
+}
+
+.cardBody {
+  grid-column: 3;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.cardTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.profBlock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.profAvatar {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ink) 0%, #1d2f4f 100%);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 0 2px color-mix(in srgb, var(--accent-soft) 40%, transparent);
+}
+
+.cardCancelled .profAvatar {
+  background: var(--ink-3);
+  box-shadow: none;
+}
+
+.profMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.profLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
+}
+
+.profName {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 28ch;
+}
+
+.profDept {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardTags {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.groupPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--sage-soft) 70%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--sage) 35%, var(--sage-soft));
+  color: #2a4a36;
+  font-weight: 600;
+}
+
+.typeChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+
+.typeChipPrep {
+  background: color-mix(in srgb, var(--accent-soft) 75%, var(--paper));
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--accent-soft));
+  color: var(--accent-deep);
+}
+
+.typeChipThesis {
+  background: color-mix(in srgb, var(--sage-soft) 60%, var(--paper));
+  border-color: color-mix(in srgb, var(--sage) 25%, var(--sage-soft));
+  color: #2a4a36;
+}
+
+.cardSubject {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  margin: 4px 0 -2px;
+}
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-tint);
+  color: var(--ink-2);
+  line-height: 1;
+}
+
+.statusTagBooked {
+  background: color-mix(in srgb, var(--accent-soft) 80%, var(--paper));
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--accent-soft));
+  color: var(--accent-deep);
+}
+
+.statusTagCancelled {
+  background: var(--danger-soft);
+  border-color: #e8b8b8;
+  color: var(--danger);
+}
+
+.statusTagPast {
+  background: var(--bg-tint);
+  border-color: var(--line-strong);
+  color: var(--ink-3);
+}
+
+.statusTagIcon {
+  display: inline-block;
+}
+
+.cardTopic {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+  word-break: break-word;
+}
+
+.cardCancelled .cardTopic {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--danger) 60%, transparent);
+}
+
+.cardMetaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 2px;
+}
+
+.timeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 10px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.timeChip svg {
+  color: var(--accent-deep);
+}
+
+.cardCancelled .timeChip {
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  border-color: var(--line);
+}
+
+.cardCancelled .timeChip svg {
+  color: var(--ink-3);
+}
+
+.cardNote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.4;
+  max-width: 50ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardCancelled .cardNote {
+  color: var(--ink-3);
+}
+
+.cancel {
+  grid-column: 4;
+  align-self: center;
+  margin-right: 4px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.6);
+  transition: all 200ms var(--ease);
+}
+
+.cancel:hover:not(:disabled) {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.cancel:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* Inline cancel composer — opens beneath the row when the student picks
+   "cancel". Stretches the full width of the body column so the textarea
+   has room to breathe. */
+.cancelComposer {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 14px 22px 4px 102px;
+  padding: 14px 16px;
+  border: 1px solid var(--danger-soft);
+  background: color-mix(in srgb, var(--danger-soft) 35%, var(--paper));
+  border-radius: var(--radius);
+}
+
+.cancelLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.cancelLabelHint {
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-3);
+  margin-left: 4px;
+}
+
+.cancelInput {
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 9px 11px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  resize: vertical;
+  min-height: 56px;
+}
+
+.cancelInput:focus {
+  outline: none;
+  border-color: var(--danger);
+}
+
+.cancelActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cancelBack,
+.cancelConfirm {
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  cursor: pointer;
+}
+
+.cancelBack:hover:not(:disabled) {
+  background: var(--bg-tint);
+}
+
+.cancelConfirm {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--paper);
+}
+
+.cancelConfirm:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.cancelConfirm:disabled,
+.cancelBack:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Cancelled tombstone reason snippet. */
+.cancelledReason {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.cancelledReasonLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+@media (max-width: 600px) {
+  .card {
+    grid-template-columns: 6px 64px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 14px;
+    padding: 16px 16px 16px 0;
+  }
+  .cardCompact {
+    grid-template-columns: 5px 56px 1fr;
+    column-gap: 12px;
+    padding: 14px 14px 14px 0;
+  }
+  .cardStamp {
+    margin: 4px 0;
+    border-right: none;
+    border-bottom: 1px dashed var(--line);
+    padding: 4px 8px 10px;
+  }
+  .cardStampDay {
+    font-size: 28px;
+  }
+  .cardCompact .cardStampDay {
+    font-size: 24px;
+  }
+  .cardBody {
+    padding: 0 4px 0 0;
+  }
+  .cardTopic {
+    font-size: 18px;
+  }
+  .cardCompact .cardTopic {
+    font-size: 16.5px;
+  }
+  .cancel {
+    grid-column: 2 / -1;
+    justify-self: stretch;
+    margin: 4px 4px 4px 0;
+  }
+  .cardTopRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .cardTags {
+    align-self: flex-start;
+  }
+}

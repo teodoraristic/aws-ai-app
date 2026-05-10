@@ -1,0 +1,14 @@
+{
+  "UniConsultationsStack": {
+    "ApiEndpoint4F160690": "https://d4b9qilku7.execute-api.eu-west-1.amazonaws.com/prod/",
+    "UserPoolClientId": "39n160nst6o7l448uv9l27jnv6",
+    "TableName": "ConsultationsApp",
+    "UserPoolDomain": "uni-consultations-2025.auth.eu-west-1.amazoncognito.com",
+    "ApiUrl": "https://d4b9qilku7.execute-api.eu-west-1.amazonaws.com/prod/",
+    "CloudFrontUrl": "https://d33x0pd8hsvx2v.cloudfront.net",
+    "UserPoolId": "eu-west-1_8EJxbdrM1",
+    "SiteBucketName": "uniconsultationsstack-sitebucket397a1860-bxzosthezt1b",
+    "DistributionId": "E3R6DQS28R0JRU",
+    "ReportsBucketName": "uniconsultationsstack-dailyreportsbucket72baba55-4d8zwfyc76lp"
+  }
+}

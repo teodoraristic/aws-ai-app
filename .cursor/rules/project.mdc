@@ -1,0 +1,12 @@
+Always read PROJECT_CONTEXT.md before writing any code.
+Follow the DynamoDB key schema exactly as defined in PROJECT_CONTEXT.md — no deviations.
+Never use scan() on DynamoDB. Never use FilterExpression as a substitute for proper key design.
+This is a demo app — keep code simple and functional, not production-grade.
+Backend: Node.js 22.x Lambda functions. AWS SDK v3 only (@aws-sdk). 
+Use CommonJS (require/module.exports) for Lambda handlers.
+CDK: Runtime.NODEJS_22_X
+Infrastructure: AWS CDK JavaScript only. One stack: UniConsultationsStack.
+Bedrock: use converse() API, model amazon.nova-lite-v1:0, region eu-west-1.
+Frontend: React + Vite, no TypeScript, no Tailwind, no component libraries. Plain CSS modules.
+When writing Lambda handlers: always handle OPTIONS method and return CORS headers.
+Do not add features not listed in PROJECT_CONTEXT.md.

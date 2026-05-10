@@ -1,0 +1,144 @@
+/* ── Page header (shared) ──────────────────────────────────────────
+   University-bulletin styling: a thin gold rule broken by a centered
+   fleuron sits above every page title, then the eyebrow + serif
+   headline + lead. Same rhythm everywhere so navigating between Home,
+   Professors, MyConsultations and Calendar feels like turning pages of
+   the same publication.
+*/
+
+.intro {
+  margin: 0 0 32px;
+  animation: riseIn 480ms var(--ease) both;
+}
+
+/* Hero variant — only on the Home dashboard. Slightly larger headline
+   ceiling so the welcome line breathes, but every other rhythm is
+   identical to the default. */
+.introHero {
+  margin-bottom: 40px;
+}
+
+/* ── Title row ────────────────────────────────────────────────────── */
+
+.titleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 14px;
+}
+
+.titleCol {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.meta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 6px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 10px;
+  /* Subtle accent dot in front of every eyebrow — same one used inside
+     the navy ribbon — so the academic sigil shows up consistently. */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4vw, 3.1rem);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  margin: 0;
+  color: var(--ink);
+  /* Tighter ink-tone subtle gradient gives serif headlines a hint of
+     dimension without going showy. */
+  background: linear-gradient(
+    180deg,
+    var(--ink) 0%,
+    color-mix(in srgb, var(--ink) 86%, var(--accent-deep)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.introHero .title {
+  font-size: clamp(2.5rem, 4.6vw, 3.6rem);
+  line-height: 1.02;
+}
+
+.titleDot {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: var(--accent);
+  margin-left: 2px;
+}
+
+.lead {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0 0 22px;
+  max-width: 60ch;
+}
+
+.lead a {
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--accent-soft);
+}
+
+.lead a:hover {
+  border-bottom-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+.introHero .lead {
+  font-size: 17px;
+  max-width: 56ch;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .intro,
+  .introHero {
+    margin-bottom: 26px;
+  }
+  .titleRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .meta {
+    padding-bottom: 0;
+  }
+  .lead {
+    font-size: 15.5px;
+    margin-bottom: 18px;
+  }
+}

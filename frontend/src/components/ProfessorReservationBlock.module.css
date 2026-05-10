@@ -1,0 +1,647 @@
+/* ── Professor reservation block (shared) ─────────────────────────
+   "Block first, sessions inside" layout used on the My Reservations
+   page AND the Home upcoming preview. A block represents a contiguous
+   run of office-hour slots that all carry at least one booking. The
+   block header shows the date stamp + time range; the rows inside are
+   the per-slot sessions. Read-only on Home; the My Reservations page
+   passes a `manage` bundle to enable the inline capacity editor and
+   the cancel-with-note composer.
+*/
+
+.block {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: 16px 16px 12px;
+  animation: riseIn 380ms var(--ease) both;
+  position: relative;
+  overflow: hidden;
+}
+
+.block::before {
+  /* Thin gold ribbon along the top of every block — reads as a
+     publication issue marker. Subtle, not loud. */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent-deep) 35%,
+    var(--accent) 70%,
+    transparent 100%
+  );
+  opacity: 0.55;
+}
+
+.blockHead {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px dashed var(--line-strong);
+}
+
+.stamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  padding: 8px 0;
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.stampDay {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.stampMonth {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+.blockMeta {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.blockWeek {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.blockRange {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+}
+
+.blockRangeDash {
+  color: var(--ink-3);
+}
+
+.blockCount {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--accent-soft) 60%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--accent-soft));
+  border-radius: 999px;
+}
+
+.blockCountCancelled {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: #e8b8b8;
+}
+
+.blockRows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* Rows now self-divide via border-top in .proRow — no inter-row gap. */
+  gap: 0;
+}
+
+/* ── Professor reservation row (minimal redesign) ──────────────────
+     time · topic · students · note · seats     [+] [×]
+   Pills, badges and the big progress bar are gone — the information
+   density now comes from typography and rhythm, not chrome.
+*/
+
+.proRow {
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
+  align-items: flex-start;
+  column-gap: 18px;
+  padding: 14px 12px 14px 14px;
+  border-top: 1px solid var(--line);
+  transition: background 160ms var(--ease);
+}
+
+.proRow:first-child {
+  border-top: none;
+}
+
+.proRow:hover {
+  background: color-mix(in srgb, var(--paper-warm) 60%, transparent);
+}
+
+.proRowCancelled {
+  opacity: 0.78;
+  background: color-mix(in srgb, var(--danger-soft) 28%, transparent);
+}
+
+.proRowCancelled:hover {
+  background: color-mix(in srgb, var(--danger-soft) 38%, transparent);
+}
+
+.proRowCancelled .proTopic {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--danger) 55%, transparent);
+}
+
+.proRowCancelled .proTimeStart,
+.proRowCancelled .proTimeDur {
+  color: var(--ink-3);
+}
+
+.proCancelledAttribution {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+.proCancelledReason {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.proCancelledReasonLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.proTime {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 2px;
+}
+
+.proTimeStart {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.proTimeDur {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+}
+
+.proBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.proTopic {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  margin: 0;
+  word-break: break-word;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.typeChip {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.typeChipPrep {
+  background: color-mix(in srgb, var(--accent-soft) 75%, var(--paper));
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--accent-soft));
+  color: var(--accent-deep);
+}
+
+.typeChipThesis {
+  background: color-mix(in srgb, var(--sage-soft) 60%, var(--paper));
+  border-color: color-mix(in srgb, var(--sage) 25%, var(--sage-soft));
+  color: #2a4a36;
+}
+
+.proSubject {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.proStudents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.proStudent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.proStudentDot {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.proStudentName {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proStudentTopic {
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proNote {
+  margin: 2px 0 0;
+  padding: 0 0 0 10px;
+  border-left: 2px solid var(--accent-soft);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+
+.proMetaLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.proCount {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+.proCount strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.proCountSep {
+  color: var(--line-strong);
+}
+
+.proCountMax {
+  color: var(--ink-3);
+}
+
+.proCountUnit {
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 9.5px;
+}
+
+.proActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.proIconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease),
+    background 150ms var(--ease), transform 150ms var(--ease);
+}
+
+.proIconBtn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--bg-tint);
+  transform: translateY(-1px);
+}
+
+.proIconBtn:active {
+  transform: scale(0.94);
+}
+
+.proIconBtnDanger:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* Inline capacity editor */
+.proEdit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  animation: riseIn 180ms var(--ease) both;
+}
+
+.proEditLabel {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  min-width: 0;
+}
+
+.proEditInput {
+  width: 56px;
+  padding: 5px 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  outline: none;
+}
+
+.proEditInput:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.proEditInputError {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 12%, transparent);
+}
+
+.proEditSave {
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity 150ms var(--ease);
+}
+
+.proEditSave:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.proEditSave:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.proEditDismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+
+.proEditDismiss:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+/* Cancel-with-note composer. */
+.proCancelNote {
+  margin-top: 8px;
+  padding: 12px 14px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--danger);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: riseIn 180ms var(--ease) both;
+}
+
+.proCancelNoteLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.proCancelNoteInput {
+  width: 100%;
+  resize: vertical;
+  min-height: 44px;
+  padding: 8px 10px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 150ms var(--ease), box-shadow 150ms var(--ease);
+}
+
+.proCancelNoteInput:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.proCancelNoteInput:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.proCancelNoteRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.proCancelNoteHint {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.proCancelNoteCount {
+  margin-left: 6px;
+  color: var(--ink-2);
+}
+
+.proCancelNoteActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.proCancelNoteBack {
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+
+.proCancelNoteBack:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.proCancelNoteBack:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.proCancelNoteSend {
+  padding: 7px 16px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: opacity 150ms;
+}
+
+.proCancelNoteSend:hover:not(:disabled) {
+  opacity: 0.86;
+}
+
+.proCancelNoteSend:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .proRow {
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    row-gap: 6px;
+  }
+  .proActions {
+    grid-column: 1 / -1;
+    justify-self: flex-end;
+  }
+  .proTopic {
+    font-size: 16.5px;
+  }
+}

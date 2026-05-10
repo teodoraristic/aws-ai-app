@@ -1,0 +1,253 @@
+/* Newsreader gives headings a slightly typeset, serious feel — closer to a
+   journal or university bulletin than a SaaS dashboard. Body text stays on
+   Geist for legibility at small sizes. */
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap");
+
+:root {
+  /* ── Surfaces ─────────────────────────────────────────────────── */
+  --bg: #f3efe4;
+  --bg-tint: #eae3d1;
+  --paper: #ffffff;
+  --paper-warm: #fbf6e8;
+
+  /* ── Ink (text) — darker, navy-leaning for institutional contrast */
+  --ink: #11203a;
+  --ink-2: #3a455d;
+  --ink-3: #6c7488;
+  --ink-4: #aaa897;
+
+  /* ── Lines / dividers ─────────────────────────────────────────── */
+  --line: #ddd6c2;
+  --line-strong: #bcb39c;
+
+  /* ── Brand accents (faculty palette) ──────────────────────────── */
+  /* Navy is the structural primary, gold the highlight, burgundy is a
+     reserved-state / important accent. Sage stays for "available". */
+  --navy: #11203a;
+  --navy-soft: #d8dde7;
+  --accent: #a07125;
+  --accent-bright: #c8902c;
+  --accent-deep: #6f4d12;
+  --accent-soft: #efe2c2;
+  --burgundy: #7b2d2d;
+  --burgundy-soft: #ecd6d6;
+  --sage: #355c43;
+  --sage-soft: #d8e3da;
+
+  --danger: #9b1c1c;
+  --danger-soft: #f0d2d2;
+
+  /* ── Typography ───────────────────────────────────────────────── */
+  /* Display = serif (Newsreader). Body = Geist. Mono kept for metadata
+     labels / timecodes. */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-display: "Newsreader", "Source Serif 4", "Source Serif Pro",
+    Georgia, "Times New Roman", serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ── Elevation ────────────────────────────────────────────────── */
+  --shadow-1: 0 1px 0 rgba(17, 32, 58, 0.06),
+    0 1px 2px rgba(17, 32, 58, 0.05);
+  --shadow-2: 0 1px 0 rgba(17, 32, 58, 0.06),
+    0 6px 18px -10px rgba(17, 32, 58, 0.18);
+  --shadow-3: 0 1px 0 rgba(17, 32, 58, 0.06),
+    0 18px 36px -18px rgba(17, 32, 58, 0.22);
+
+  /* ── Geometry ─────────────────────────────────────────────────── */
+  /* Tightened radius — less playful SaaS, more "form on official letterhead". */
+  --radius-sm: 3px;
+  --radius: 5px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+  /* Layered atmosphere — top-right gold haze (sunlit window), mid-left
+     navy wash (the building looking back), bottom-right sage accent
+     (a pinned-up notice on the bulletin). Three soft pools instead
+     of a flat beige flood, so the page never reads as one slab. */
+  background-image:
+    radial-gradient(
+      1100px 600px at 88% -8%,
+      rgba(200, 144, 44, 0.13),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 700px at -10% 35%,
+      rgba(17, 32, 58, 0.06),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 110% 110%,
+      rgba(53, 92, 67, 0.07),
+      transparent 60%
+    );
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.07  0 0 0 0 0.13  0 0 0 0 0.23  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 160ms var(--ease),
+    box-shadow 160ms var(--ease),
+    background 160ms var(--ease);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink-3);
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus-visible {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.14);
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms var(--ease), color 160ms var(--ease);
+}
+
+a:hover {
+  border-bottom-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+h1 {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.012em;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.55rem;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.18rem;
+  line-height: 1.25;
+  letter-spacing: -0.003em;
+  font-weight: 500;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulseSoft {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

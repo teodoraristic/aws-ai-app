@@ -1,0 +1,1324 @@
+/* ── Calendar page — Google Calendar-style time grid ────────────────
+   Editorial reinterpretation: cream paper canvas, navy ink type, gold
+   event blocks. Hour gutter on the left, day columns with 30-min
+   gridlines, an absolutely-positioned event block per consultation,
+   and a live "now" line that ticks every minute. */
+
+.page {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 28px 48px;
+}
+
+/* ── Page intro (matches MyConsultations cadence) ─────────────────── */
+
+/* ── Top control bar — Today, arrows, range label, view toggle ───── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  flex-wrap: wrap;
+  animation: riseIn 460ms var(--ease) both;
+  animation-delay: 60ms;
+}
+
+.navGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.todayBtn {
+  padding: 7px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 150ms var(--ease), color 150ms var(--ease),
+    border-color 150ms var(--ease), transform 150ms var(--ease);
+}
+
+.todayBtn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.arrowGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.arrowBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease),
+    background 150ms var(--ease);
+}
+
+.arrowBtn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--bg-tint);
+}
+
+.rangeLabel {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0 0 0 4px;
+}
+
+.controlsRight {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.viewSwitch {
+  display: inline-flex;
+  align-items: center;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+/* Primary CTA — navy filled pill that mirrors the dialog `Publish`
+   button. Sits at the right edge of the controls, just past the view
+   switch. The plus glyph carries an `aria-hidden` so screen readers
+   only announce the label. */
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 13px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  cursor: pointer;
+  transition: transform 160ms var(--ease), background 160ms var(--ease),
+    box-shadow 160ms var(--ease);
+  box-shadow: 0 1px 0 rgba(17, 32, 58, 0.06);
+}
+
+.addBtn svg {
+  flex-shrink: 0;
+}
+
+.addBtn:hover {
+  background: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px rgba(17, 32, 58, 0.35);
+}
+
+.addBtn:active {
+  transform: translateY(0);
+}
+
+.addBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.viewBtn {
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 150ms var(--ease), background 150ms var(--ease);
+}
+
+.viewBtn:hover {
+  color: var(--ink);
+}
+
+.viewBtnActive {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.viewBtnActive:hover {
+  color: var(--paper);
+}
+
+/* ── Stat ribbon ─────────────────────────────────────────────────── */
+
+.statRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  padding: 12px 22px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  animation: riseIn 460ms var(--ease) both;
+  animation-delay: 100ms;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.statValueSmall {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+.statDivider {
+  width: 1px;
+  height: 30px;
+  background: var(--line);
+}
+
+.statNext {
+  max-width: 22ch;
+}
+
+.error {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #e8b8b8;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+
+/* Inline status banner — used after publish / delete to confirm the
+   change without yanking the professor away from their position on the
+   grid. Auto-dismisses after a short window (handled in JS). Sage
+   palette so it reads as success without competing with the gold event
+   blocks for attention. */
+.notice {
+  margin-bottom: 14px;
+  padding: 10px 14px 10px 16px;
+  background: var(--sage-soft);
+  color: #2f5b3e;
+  border: 1px solid #c1d3c5;
+  border-left: 3px solid var(--sage);
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.45;
+  animation: noticeIn 220ms var(--ease) both;
+}
+
+@keyframes noticeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Canvas wraps the chosen view ────────────────────────────────── */
+
+.canvas {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  animation: riseIn 480ms var(--ease) both;
+  animation-delay: 140ms;
+}
+
+/* ── Shared time-grid scaffolding (week + day) ───────────────────── */
+
+.scroller {
+  max-height: calc(100vh - 320px);
+  min-height: 480px;
+  overflow-y: auto;
+  /* Reserve a thin scroll gutter so day columns stay aligned with the
+     header columns above (which never get a scrollbar). */
+  scrollbar-gutter: stable;
+}
+
+.gutter {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 64px;
+  pointer-events: none;
+}
+
+.gutterRow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+}
+
+.gutterLabel {
+  position: absolute;
+  top: -7px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.gridLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+
+.gridLineHour {
+  background: var(--line);
+}
+
+.gridLineHalf {
+  background: color-mix(in srgb, var(--line) 55%, transparent);
+}
+
+/* Live "now" line — borrows Google Calendar's red accent on purpose;
+   it's the one place we let danger red mean "you are here". */
+.nowLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px solid #d24343;
+  z-index: 4;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.nowDot {
+  position: absolute;
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d24343;
+  box-shadow: 0 0 0 2px var(--paper);
+  transform: translateX(-5px);
+}
+
+/* ── Week view ───────────────────────────────────────────────────── */
+
+.weekWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.weekHead {
+  display: grid;
+  grid-template-columns: 64px repeat(7, 1fr);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-warm);
+}
+
+.weekHeadGutter {
+  border-right: 1px solid var(--line);
+}
+
+.weekHeadDay {
+  padding: 10px 6px 8px;
+  text-align: center;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.weekHeadDay:last-child {
+  border-right: none;
+}
+
+.weekHeadWeek {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+.weekHeadNum {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+}
+
+.weekHeadDayToday .weekHeadWeek {
+  color: var(--accent-deep);
+}
+
+.weekHeadDayToday .weekHeadNum {
+  color: var(--paper);
+  background: var(--ink);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px auto 0;
+}
+
+.weekBody {
+  position: relative;
+  display: block;
+}
+
+.weekColumns {
+  position: relative;
+  margin-left: 64px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 100%;
+}
+
+.dayCol {
+  position: relative;
+  border-right: 1px solid var(--line);
+  min-height: 100%;
+}
+
+.dayCol:last-child {
+  border-right: none;
+}
+
+.dayColToday {
+  background: color-mix(in srgb, var(--accent-soft) 18%, transparent);
+}
+
+/* Empty-area click affordance — the column is a click target for
+   publishing a new office-hour block at that time. We use crosshair on
+   hover so the gesture reads as "place something here", and a soft
+   warm-paper wash so the column lifts subtly under the pointer without
+   masking the existing gridlines. */
+.dayColInteractive {
+  cursor: cell;
+}
+
+.dayColInteractive:hover {
+  background: color-mix(in srgb, var(--paper-warm) 60%, transparent);
+}
+
+.dayColInteractive.dayColToday:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-soft) 22%,
+    var(--paper-warm) 30%
+  );
+}
+
+/* ── Day view ────────────────────────────────────────────────────── */
+
+.dayWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.dayHead {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-warm);
+}
+
+.dayHeadGutter {
+  border-right: 1px solid var(--line);
+}
+
+.dayHeadDay {
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.dayHeadDay .weekHeadWeek {
+  font-size: 11px;
+}
+
+.dayHeadDay .weekHeadNum {
+  font-size: 28px;
+}
+
+.dayHeadDay.weekHeadDayToday .weekHeadNum {
+  width: 38px;
+  height: 38px;
+}
+
+.dayHeadMonth {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.dayBody {
+  position: relative;
+}
+
+.dayColumns {
+  position: relative;
+  margin-left: 64px;
+}
+
+.dayColumnsToday .dayCol {
+  background: color-mix(in srgb, var(--accent-soft) 14%, transparent);
+}
+
+.dayCol .dayEmpty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+  /* Don't intercept clicks — the column underneath is the click target
+     for `+ new office hours at this time`. */
+  pointer-events: none;
+}
+
+/* ── Event block ─────────────────────────────────────────────────── */
+
+.event {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  padding: 6px 9px 5px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent-soft) 92%, var(--paper)) 0%,
+    color-mix(in srgb, var(--accent-soft) 75%, var(--paper)) 100%
+  );
+  color: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--accent-soft));
+  border-left: 3px solid var(--accent-deep);
+  border-radius: var(--radius);
+  cursor: pointer;
+  z-index: 2;
+  font-family: var(--font-sans);
+  transition: transform 140ms var(--ease), box-shadow 140ms var(--ease),
+    filter 140ms var(--ease);
+  box-shadow: 0 1px 0 rgba(17, 32, 58, 0.04);
+}
+
+.event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px -2px rgba(17, 32, 58, 0.18);
+  filter: saturate(1.05);
+  z-index: 3;
+}
+
+.eventGroup {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sage-soft) 92%, var(--paper)) 0%,
+    color-mix(in srgb, var(--sage-soft) 70%, var(--paper)) 100%
+  );
+  border-color: color-mix(in srgb, var(--sage) 35%, var(--sage-soft));
+  border-left-color: var(--sage);
+}
+
+.eventCancelled {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--danger-soft) 60%, transparent) 0,
+      color-mix(in srgb, var(--danger-soft) 60%, transparent) 6px,
+      color-mix(in srgb, var(--danger-soft) 30%, transparent) 6px,
+      color-mix(in srgb, var(--danger-soft) 30%, transparent) 12px
+    );
+  border-color: color-mix(in srgb, var(--danger) 28%, var(--danger-soft));
+  border-left-color: var(--danger);
+  color: var(--ink-3);
+}
+
+.eventCancelled .eventTopic {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--danger) 60%, transparent);
+}
+
+.eventTime {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.eventTopic {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eventParticipants {
+  font-size: 12px;
+  color: var(--ink-2);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventParticipantsCompact {
+  font-size: 11px;
+  color: var(--ink-2);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventCompact {
+  padding: 4px 6px 3px;
+}
+
+.eventCompact .eventTopic {
+  font-size: 12px;
+}
+
+.eventTiny {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+}
+
+.eventTiny .eventTime {
+  font-size: 9.5px;
+}
+
+.eventTiny .eventTopic {
+  font-size: 11.5px;
+}
+
+/* Capacity badge — sits in the top-right of grouped events. */
+.eventBadge {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+  background: var(--sage);
+  padding: 2px 6px;
+  border-radius: 999px;
+  line-height: 1;
+}
+
+.eventBadgeSep {
+  margin: 0 1px;
+  opacity: 0.7;
+}
+
+/* ── Open-availability overlay ──────────────────────────────────────
+   A muted, non-interactive ghost block drawn behind real events. Tells
+   the professor "this time is on the public schedule, no booking yet".
+   Intentionally low-contrast — the booked density is the headline,
+   open availability is supporting context. */
+.openSlot {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  padding: 4px 8px 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: visible;
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--ink-4) 10%, transparent) 0,
+    color-mix(in srgb, var(--ink-4) 10%, transparent) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  border: 1px dashed color-mix(in srgb, var(--ink-4) 50%, transparent);
+  border-radius: var(--radius-sm);
+  /* Catch hover so the inline ✕ shows up, and stop the column's
+     create-on-empty handler from firing when the professor is aiming
+     at an existing open slot. */
+  pointer-events: auto;
+  cursor: default;
+  z-index: 1;
+  font-family: var(--font-mono);
+  transition: background 160ms var(--ease), border-color 160ms var(--ease);
+}
+
+.openSlot:hover {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--ink-4) 18%, transparent) 0,
+    color-mix(in srgb, var(--ink-4) 18%, transparent) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  border-color: color-mix(in srgb, var(--ink-4) 70%, transparent);
+}
+
+.openSlotLabel {
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.openSlotTime {
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.openSlotCompact {
+  padding: 3px 5px 2px;
+}
+
+.openSlotTiny {
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 5px;
+}
+
+.openSlotTiny .openSlotTime {
+  display: none;
+}
+
+/* ── Inline delete on open slots ────────────────────────────────────
+   Sits in the top-right corner of the dashed open-slot block. Hidden
+   by default, slides in on hover so the open-slot density of the week
+   isn't drowned in red ✕ marks. Keyboard users still reach it via Tab
+   thanks to focus-visible. */
+.openSlotDelete {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--paper);
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--line));
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 140ms var(--ease), transform 140ms var(--ease),
+    background 140ms var(--ease), color 140ms var(--ease);
+  box-shadow: 0 2px 6px -2px rgba(17, 32, 58, 0.25);
+  z-index: 5;
+}
+
+.openSlot:hover .openSlotDelete,
+.openSlotDelete:focus-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.openSlotDelete:hover:not(:disabled) {
+  background: var(--danger);
+  color: var(--paper);
+  border-color: var(--danger);
+}
+
+.openSlotDelete:disabled {
+  cursor: progress;
+}
+
+/* Loading pip while a delete is in flight. Replaces the ✕ glyph so
+   the affordance doesn't visually disappear mid-action. */
+.openSlotSpinner {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  animation: openSlotSpin 700ms linear infinite;
+}
+
+.openSlotBusy {
+  opacity: 0.7;
+}
+
+.openSlotBusy .openSlotDelete {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes openSlotSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .openSlotDelete {
+    transition: none;
+  }
+  .openSlotSpinner {
+    animation: none;
+  }
+}
+
+/* ── Month view ──────────────────────────────────────────────────── */
+
+.monthWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.monthHead {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--line);
+}
+
+.monthHeadDay {
+  min-width: 0;
+  padding: 10px 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: left;
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monthHeadDay:last-child {
+  border-right: none;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(108px, 1fr);
+}
+
+.monthCell {
+  position: relative;
+  min-width: 0;
+  text-align: left;
+  padding: 6px 6px 4px;
+  background: var(--paper);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  min-height: 108px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: background 140ms var(--ease);
+  font-family: var(--font-sans);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.monthCell:hover {
+  background: var(--paper-warm);
+}
+
+.monthCell:nth-child(7n) {
+  border-right: none;
+}
+
+.monthCellOut {
+  background: color-mix(in srgb, var(--bg-tint) 35%, var(--paper));
+  color: var(--ink-3);
+}
+
+.monthCellOut .monthCellNum {
+  color: var(--ink-3);
+}
+
+.monthCellToday .monthCellNum {
+  color: var(--paper);
+  background: var(--ink);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.monthCellTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.monthCellNum {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  align-self: flex-start;
+}
+
+/* Tiny pip on month cells indicating how many open slots are still
+   available that day. Sage palette so it reads as "spare capacity"
+   without competing with the gold/navy event chips below. */
+.monthOpenPip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--sage-soft);
+  color: #2f5b3e;
+  border: 1px solid color-mix(in srgb, var(--sage) 35%, var(--sage-soft));
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.monthCellList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.monthChip {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 7px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent-soft) 90%, var(--paper)) 0%,
+    color-mix(in srgb, var(--accent-soft) 60%, var(--paper)) 100%
+  );
+  border-left: 2px solid var(--accent-deep);
+  border-radius: 3px;
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+  overflow: hidden;
+  transition: filter 140ms var(--ease);
+}
+
+.monthChip:hover {
+  filter: brightness(0.96);
+}
+
+.monthChipGroup {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sage-soft) 90%, var(--paper)) 0%,
+    color-mix(in srgb, var(--sage-soft) 60%, var(--paper)) 100%
+  );
+  border-left-color: var(--sage);
+}
+
+.monthChipCancelled {
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--danger-soft) 60%, transparent) 0,
+    color-mix(in srgb, var(--danger-soft) 60%, transparent) 4px,
+    color-mix(in srgb, var(--danger-soft) 25%, transparent) 4px,
+    color-mix(in srgb, var(--danger-soft) 25%, transparent) 8px
+  );
+  border-left-color: var(--danger);
+  color: var(--ink-3);
+}
+
+.monthChipCancelled .monthChipTopic {
+  text-decoration: line-through;
+}
+
+.monthChipTime {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+
+.monthChipTopic {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.monthMore {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  padding: 1px 4px;
+}
+
+/* ── Event detail dialog ─────────────────────────────────────────── */
+
+.dialogScrim {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 40%, transparent);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 24px;
+  animation: fadeIn 180ms var(--ease) both;
+}
+
+.dialog {
+  width: min(440px, 100%);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+  padding: 22px 24px 24px;
+  animation: riseIn 220ms var(--ease) both;
+}
+
+.dialogHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dialogTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-tint);
+  color: var(--ink-2);
+}
+
+.dialogTag1on1 {
+  background: var(--accent-soft);
+  border-color: #e9c4ad;
+  color: var(--accent-deep);
+}
+
+.dialogTagGroup {
+  background: var(--sage-soft);
+  border-color: #c1d3c5;
+  color: #2f5b3e;
+}
+
+.dialogTagCancelled {
+  background: var(--danger-soft);
+  border-color: #e8b8b8;
+  color: var(--danger);
+}
+
+.dialogClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease),
+    background 150ms var(--ease);
+}
+
+.dialogClose:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--bg-tint);
+}
+
+.dialogTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.dialogMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.dialogMetaDot {
+  color: var(--ink-4);
+}
+
+.dialogMetaTime {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.dialogEmpty {
+  margin: 0;
+  padding: 16px;
+  background: var(--paper-warm);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  font-size: 13.5px;
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+.dialogStudents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dialogStudent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.dialogAvatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogStudentMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.dialogStudentName {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.dialogStudentTopic {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-deep);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.dialogStudentNote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Animations ──────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* riseIn is defined globally — re-declare here so this module is
+   self-contained when used in isolation. */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive: collapse week to a 3-day strip on narrow screens ── */
+
+@media (max-width: 900px) {
+  .page {
+    padding: 24px 14px 40px;
+  }
+  .controls {
+    align-items: flex-start;
+  }
+  .rangeLabel {
+    font-size: 18px;
+  }
+  .statRow {
+    width: 100%;
+  }
+  .gutter {
+    width: 48px;
+  }
+  .weekHead {
+    grid-template-columns: 48px repeat(7, 1fr);
+  }
+  .weekColumns {
+    margin-left: 48px;
+  }
+  .dayHead {
+    grid-template-columns: 48px 1fr;
+  }
+  .dayColumns {
+    margin-left: 48px;
+  }
+  .gutterLabel {
+    font-size: 9.5px;
+    right: 6px;
+  }
+  .monthGrid {
+    grid-auto-rows: minmax(80px, 1fr);
+  }
+  .monthCell {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Force the week view's columns to a horizontal scroll instead of
+     squeezing them under 60px each, which makes the event blocks
+     unreadable. The scroller already handles vertical scroll; we
+     widen the inner grid to give each column a usable minimum. */
+  .scroller {
+    overflow-x: auto;
+  }
+  .weekHead,
+  .weekColumns {
+    min-width: 720px;
+  }
+  .monthChipTopic {
+    display: none;
+  }
+}

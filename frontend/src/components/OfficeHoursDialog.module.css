@@ -1,0 +1,497 @@
+/* ── Office-hours publish dialog ───────────────────────────────────
+   The single creation surface for new office-hour blocks. Editorial
+   palette stays consistent with the calendar canvas behind it: cream
+   paper, navy ink, gold tags. The dialog is a centered card with a
+   blurred backdrop — a "form on official letterhead" rather than a
+   floaty SaaS modal. */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 38%, transparent);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 100;
+  padding: clamp(20px, 6vh, 64px) 20px 20px;
+  overflow-y: auto;
+  animation: ohdFade 200ms var(--ease) both;
+}
+
+.dialog {
+  width: min(560px, 100%);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-3);
+  padding: 28px 30px 26px;
+  animation: ohdRise 240ms var(--ease) both;
+  position: relative;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.headText {
+  min-width: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 6px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.lead {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 44ch;
+}
+
+.close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease),
+    background 150ms var(--ease);
+}
+
+.close:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--bg-tint);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.requiredTag {
+  text-transform: none;
+  letter-spacing: 0;
+  font-style: normal;
+  font-size: 10.5px;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+.input {
+  font-size: 14.5px;
+  padding: 11px 14px !important;
+  border-radius: var(--radius) !important;
+}
+
+.fieldHint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ── Block-type chooser ─────────────────────────────────────────── */
+
+.typeFieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.typeOptions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.typeOption {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--paper);
+  transition: border-color 160ms var(--ease), background 160ms var(--ease);
+}
+
+.typeOption:hover {
+  border-color: var(--ink-3);
+}
+
+.typeOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.typeOptionActive {
+  border-color: var(--accent);
+  background: var(--paper-warm);
+}
+
+.typeOptionTitle {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.typeOptionHint {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  line-height: 1.35;
+}
+
+/* ── Recurrence toggle ──────────────────────────────────────────── */
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ink);
+}
+
+/* ── Recurrence group (recur-until + weekday picker) ───────────────
+   When the user enables recurrence we group the two related controls
+   in a soft warm-paper card so they read as one settings cluster
+   instead of competing with the rest of the form. */
+.recurGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  animation: ohdRecurIn 200ms var(--ease) both;
+}
+
+@keyframes ohdRecurIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.weekdayFieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Weekday chip picker ─────────────────────────────────────────── */
+/* Seven flat pill chips in a single row. Active = navy fill (the same
+   ink the Publish button uses, so the visual weight reinforces "this
+   is selected"). Anchor chip carries a tiny gold dot underneath the
+   label to signal "this is the weekday of your start date" without
+   relying on a separate row of helper text. */
+.weekdayPicker {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.weekdayChip {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 9px 4px 8px;
+  background: var(--paper);
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 160ms var(--ease), color 160ms var(--ease),
+    border-color 160ms var(--ease), transform 160ms var(--ease),
+    box-shadow 160ms var(--ease);
+}
+
+.weekdayChipText {
+  line-height: 1;
+}
+
+.weekdayChip:hover:not(.weekdayChipActive) {
+  border-color: var(--ink-3);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.weekdayChip:active {
+  transform: translateY(0);
+}
+
+.weekdayChip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.weekdayChipActive {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  box-shadow: 0 1px 0 rgba(17, 32, 58, 0.08),
+    0 4px 12px -6px rgba(17, 32, 58, 0.32);
+}
+
+.weekdayChipActive:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+/* Anchor dot — small gold pip under the chip label that marks the
+   weekday matching the start date. Sits inside the chip so it tracks
+   the chip's selection state (gold against paper when inactive, gold
+   against navy when active). */
+.weekdayChipDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-bright);
+  display: inline-block;
+}
+
+.weekdayChipActive .weekdayChipDot {
+  background: var(--accent-soft);
+}
+
+.weekdayHint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.45;
+  font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weekdayChip {
+    transition: none;
+  }
+  .recurGroup {
+    animation: none;
+  }
+}
+
+@media (max-width: 540px) {
+  /* Slightly tighter chips on phones — 7 of them across a 280–320px
+     panel needs every spare pixel. */
+  .weekdayChip {
+    padding: 8px 2px 7px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+  .weekdayPicker {
+    gap: 4px;
+  }
+}
+
+/* ── Footer (cancel / publish + slot preview) ───────────────────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.preview {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.preview strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.footerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cancelBtn {
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease),
+    background 150ms var(--ease);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--bg-tint);
+}
+
+.cancelBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.submit {
+  padding: 11px 22px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  transition: transform 160ms var(--ease), background 160ms var(--ease),
+    opacity 160ms var(--ease);
+}
+
+.submit:hover:not(:disabled) {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.error {
+  padding: 11px 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #e8b8b8;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+
+@keyframes ohdFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ohdRise {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .dialog {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .dialog {
+    padding: 22px 20px 20px;
+  }
+  .row {
+    grid-template-columns: 1fr;
+  }
+  .typeOptions {
+    grid-template-columns: 1fr;
+  }
+  .title {
+    font-size: 1.35rem;
+  }
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .footerActions {
+    justify-content: stretch;
+  }
+  .cancelBtn,
+  .submit {
+    flex: 1;
+    text-align: center;
+  }
+}

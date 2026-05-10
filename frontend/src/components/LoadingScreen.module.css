@@ -1,0 +1,49 @@
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  text-align: center;
+  animation: fadeIn 320ms var(--ease) both;
+}
+
+.mark {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.mark span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: pulseSoft 1200ms var(--ease) infinite;
+}
+
+.mark span:nth-child(2) {
+  background: var(--accent);
+  animation-delay: 160ms;
+}
+
+.mark span:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}

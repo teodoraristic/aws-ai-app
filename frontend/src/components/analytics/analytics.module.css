@@ -1,0 +1,519 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Shared styles for the Analytics dashboard.
+   Mirrors the card / typography / palette tokens used across Home and
+   MyConsultations so the new feature feels native instead of bolted-on.
+   ────────────────────────────────────────────────────────────────────── */
+
+/* ── StatCard ── */
+
+.statCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 22px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  min-height: 130px;
+  overflow: hidden;
+  animation: riseIn 480ms var(--ease) both;
+  transition:
+    transform 200ms var(--ease),
+    box-shadow 200ms var(--ease),
+    border-color 200ms var(--ease);
+}
+
+.statCard:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-2);
+}
+
+.statCardLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.statCardValue {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.statCardHint {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.statCardAccent {
+  border-color: var(--accent-soft);
+}
+
+.statCardAccent .statCardValue {
+  color: var(--accent-deep);
+}
+
+.statCardSage {
+  border-color: #c1d3c5;
+}
+
+.statCardSage .statCardValue {
+  color: #2f5b3e;
+}
+
+.statCardDanger {
+  border-color: #e8b8b8;
+}
+
+.statCardDanger .statCardValue {
+  color: var(--danger);
+}
+
+/* ── Progress (occupancy) variant ── */
+
+.statCardProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progressTrack {
+  position: relative;
+  height: 6px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  background: var(--ink);
+  border-radius: 999px;
+  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progressFillAccent {
+  background: var(--accent);
+}
+
+.progressFillSage {
+  background: var(--sage);
+}
+
+.progressMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+/* ── ChartCard ── */
+
+.chartCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px 22px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  animation: riseIn 540ms var(--ease) both;
+}
+
+.chartCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.chartCardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.chartCardEyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.chartCardTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.chartCardHint {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.chartBody {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  flex: 1;
+}
+
+/* ── FilterBar ── */
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 22px;
+  padding: 16px 20px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  animation: riseIn 480ms var(--ease) both;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.filterLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Segmented selector for low-cardinality choices (range, group). */
+.segment {
+  display: inline-flex;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.segmentBtn {
+  padding: 5px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border-radius: 999px;
+  border: none;
+  transition: background 160ms var(--ease), color 160ms var(--ease);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.segmentBtn:hover {
+  color: var(--ink);
+}
+
+.segmentBtnActive,
+.segmentBtnActive:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.filterSelect {
+  padding: 7px 12px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  min-width: 160px;
+}
+
+.filterSelect:focus {
+  border-color: var(--ink);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 31, 46, 0.08);
+}
+
+.filterReset {
+  margin-left: auto;
+  padding: 7px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 160ms, background 160ms, border-color 160ms;
+}
+
+.filterReset:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--paper);
+}
+
+/* ── EmptyState ── */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--ink-3);
+}
+
+.emptyStateIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-tint);
+  border: 1px dashed var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+}
+
+.emptyStateTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.015em;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.emptyStateHint {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 30ch;
+}
+
+/* Full-page empty state used when the API returned no rows at all. */
+.pageEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 36px 28px;
+  background: var(--paper-warm);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-xl);
+  margin-top: 8px;
+  animation: riseIn 460ms var(--ease) both;
+}
+
+.pageEmptyEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.pageEmptyTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.pageEmptyHint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-2);
+  max-width: 56ch;
+}
+
+/* ── LoadingState ── */
+
+.skeletonGrid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.skeletonStat {
+  height: 130px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 0%,
+    rgba(0, 0, 0, 0.07) 50%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1400ms ease-in-out infinite;
+}
+
+.skeletonChart {
+  height: 280px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 0%,
+    rgba(0, 0, 0, 0.07) 50%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1400ms ease-in-out infinite;
+}
+
+.skeletonChartGrid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-top: 14px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ── AI insight banner ──
+   Sits above the KPI grid. Paper card with a one-line eyebrow and the
+   Bedrock paragraph, plus a small Regenerate link that bumps a nocache
+   query param so the server bypasses its 1h cache. */
+
+.insightBanner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 18px 0 0;
+  padding: 18px 22px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  animation: riseIn 480ms var(--ease) both;
+}
+
+.insightInner {
+  flex: 1;
+  min-width: 0;
+}
+
+.insightEyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 4px;
+}
+
+.insightCached {
+  font-style: italic;
+  color: var(--ink-3);
+  opacity: 0.7;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.insightBody {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+
+.insightRegenerate {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 12px;
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease);
+}
+
+.insightRegenerate:hover:not(:disabled) {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.03));
+  border-color: var(--ink-2);
+}
+
+.insightRegenerate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Inline tooltip used by Recharts ── */
+
+.chartTooltip {
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-2);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.chartTooltipLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 2px;
+}
+
+.chartTooltipValue {
+  font-weight: 600;
+  color: var(--ink);
+}

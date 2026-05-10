@@ -1,0 +1,826 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(243, 239, 228, 0.88);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid var(--line-strong);
+  box-shadow: 0 1px 0 rgba(17, 32, 58, 0.04);
+}
+
+/* University-banner stripe at the very top of the chrome. Gold ink
+   on cream — same idiom as the gilt edge on a graduation programme.
+   Pinned to the header (not the body) so it scrolls naturally. */
+.header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent-bright) 22%,
+    var(--accent-deep) 50%,
+    var(--accent-bright) 78%,
+    var(--accent) 100%
+  );
+  pointer-events: none;
+}
+
+.headerInner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  color: var(--ink);
+  text-decoration: none;
+  justify-self: start;
+  transition: opacity 160ms var(--ease);
+}
+
+.brand:hover {
+  border: none;
+  opacity: 0.85;
+}
+
+.brandMark {
+  flex-shrink: 0;
+  display: block;
+}
+
+.brandWord {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  line-height: 1;
+  /* Subtle gold hairline under the brand mark — like a printed
+     publication's masthead rule. Visible only on hover. */
+  position: relative;
+}
+
+.brandWord::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: scaleX(0.4);
+  transform-origin: left;
+  transition: opacity 200ms var(--ease), transform 240ms var(--ease);
+}
+
+.brand:hover .brandWord::after {
+  opacity: 0.8;
+  transform: scaleX(1);
+}
+
+.nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow-1);
+}
+
+.navLink {
+  padding: 7px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+  border-radius: 999px;
+  border: none;
+  transition: color 160ms var(--ease), background 160ms var(--ease);
+}
+
+.navLink:hover {
+  border: none;
+  color: var(--ink);
+  background: rgba(26, 31, 46, 0.04);
+}
+
+.navLinkActive,
+.navLinkActive:hover {
+  color: var(--paper);
+  background: linear-gradient(135deg, var(--ink) 0%, #1d2f4f 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 0 0 1px rgba(160, 113, 37, 0.18);
+}
+
+/* ── Notification bell ──────────────────────────────────────── */
+
+.bellWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bellBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--ink-2);
+  border: 1px solid transparent;
+  transition:
+    color 160ms var(--ease),
+    background 160ms var(--ease),
+    border-color 160ms var(--ease);
+}
+
+.bellBtn:hover {
+  color: var(--ink);
+  background: rgba(26, 31, 46, 0.05);
+  border-color: var(--line);
+}
+
+.bellBtnActive {
+  color: var(--accent-deep);
+}
+
+.bellBtnActive:hover {
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  border-color: #e9c4ad;
+}
+
+.bellIcon {
+  display: block;
+  transform-origin: 50% 2px;
+}
+
+@keyframes bellRing {
+  0%   { transform: rotate(0deg); }
+  10%  { transform: rotate(14deg); }
+  20%  { transform: rotate(-12deg); }
+  30%  { transform: rotate(10deg); }
+  40%  { transform: rotate(-7deg); }
+  50%  { transform: rotate(5deg); }
+  60%  { transform: rotate(-3deg); }
+  70%  { transform: rotate(2deg); }
+  80%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.bellRing {
+  animation: bellRing 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s 1 both;
+}
+
+@keyframes badgePop {
+  from { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.2); }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.bellBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 16px;
+  text-align: center;
+  pointer-events: none;
+  animation: badgePop 220ms var(--ease) both;
+  box-shadow: 0 0 0 2px rgba(251, 248, 242, 0.9);
+}
+
+/* ── Notification dropdown panel ────────────────────────────── */
+
+@keyframes panelReveal {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.notifPanel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -8px;
+  width: 360px;
+  max-height: 440px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  animation: panelReveal 180ms var(--ease) both;
+}
+
+.notifPanelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.notifPanelTitle {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.notifMarkAllBtn {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--accent-deep);
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    background 140ms var(--ease),
+    border-color 140ms var(--ease);
+}
+
+.notifMarkAllBtn:hover {
+  background: var(--accent-soft);
+  border-color: #e9c4ad;
+}
+
+/* Empty state */
+.notifEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 36px 24px;
+  color: var(--ink-3);
+}
+
+.notifEmpty p {
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Notification list */
+.notifList {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.notifList::-webkit-scrollbar {
+  width: 4px;
+}
+.notifList::-webkit-scrollbar-track {
+  background: transparent;
+}
+.notifList::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 2px;
+}
+
+@keyframes notifItemIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.notifItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  transition: background 140ms var(--ease);
+  animation: notifItemIn 200ms var(--ease) both;
+}
+
+.notifItem:last-child {
+  border-bottom: none;
+}
+
+.notifItem:hover {
+  background: rgba(26, 31, 46, 0.025);
+}
+
+.notifItemRead {
+  opacity: 0.65;
+}
+
+.notifItemRead:hover {
+  opacity: 1;
+}
+
+.notifUnreadDot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 5px;
+  transition: background 200ms var(--ease);
+}
+
+.notifItemRead .notifUnreadDot {
+  background: transparent;
+  border: 1.5px solid var(--line-strong);
+}
+
+.notifBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.notifMsg {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0 0 3px;
+  word-break: break-word;
+}
+
+.notifItemRead .notifMsg {
+  color: var(--ink-2);
+}
+
+.notifTime {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+/* Action buttons (mark-read checkmark + delete X) */
+.notifActions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 1px;
+}
+
+.notifActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  color: var(--ink-3);
+  border: 1px solid transparent;
+  transition:
+    color 140ms var(--ease),
+    background 140ms var(--ease),
+    border-color 140ms var(--ease);
+}
+
+.notifActionBtn:hover {
+  color: var(--sage);
+  background: var(--sage-soft);
+  border-color: rgba(74, 124, 89, 0.2);
+}
+
+.notifDeleteBtn:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: rgba(185, 28, 28, 0.15);
+}
+
+/* ── User section ───────────────────────────────────────────── */
+
+.user {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: end;
+}
+
+.profileWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Trigger pill — same silhouette as the old .userMeta read-only chip
+   but now a real button with hover/focus/open states and a chevron
+   affordance so users know it's interactive. */
+.profileBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  max-width: 240px;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition:
+    color 160ms var(--ease),
+    background 160ms var(--ease),
+    border-color 160ms var(--ease);
+}
+
+.profileBtn:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--paper);
+}
+
+.profileBtn:focus-visible {
+  outline: 2px solid var(--accent-deep);
+  outline-offset: 2px;
+}
+
+.profileBtnOpen {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--paper);
+}
+
+.profileChevron {
+  display: block;
+  margin-left: 2px;
+  color: var(--ink-3);
+  transition: transform 180ms var(--ease), color 160ms var(--ease);
+  flex: none;
+}
+
+.profileBtn:hover .profileChevron,
+.profileBtnOpen .profileChevron {
+  color: var(--ink-2);
+}
+
+.profileChevronOpen {
+  transform: rotate(180deg);
+}
+
+.profilePanel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  animation: panelReveal 180ms var(--ease) both;
+}
+
+.profilePanelHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 14px;
+}
+
+.profileBigAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profileNameStack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.profileFullName {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileEmail {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileDivider {
+  height: 1px;
+  background: var(--line);
+  margin: 0;
+}
+
+.profileMenuList {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profileMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 140ms var(--ease), color 140ms var(--ease);
+}
+
+.profileMenuItem:hover,
+.profileMenuItem:focus-visible {
+  background: rgba(26, 31, 46, 0.05);
+  outline: none;
+}
+
+.profileMenuItem:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent-deep);
+}
+
+.profileMenuItemDanger {
+  color: var(--danger, #b94a3b);
+}
+
+.profileMenuItemDanger:hover,
+.profileMenuItemDanger:focus-visible {
+  background: var(--danger-soft, #f7e3df);
+  color: var(--danger, #b94a3b);
+}
+
+.profileMenuItemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  color: var(--ink-2);
+  background: rgba(26, 31, 46, 0.04);
+  flex: none;
+  transition: color 140ms var(--ease), background 140ms var(--ease);
+}
+
+.profileMenuItemDanger .profileMenuItemIcon {
+  color: var(--danger, #b94a3b);
+  background: var(--danger-soft, #f7e3df);
+}
+
+.profileMenuItemText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.profileMenuItemLabel {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+
+.profileMenuItemHint {
+  font-size: 11px;
+  color: var(--ink-3);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileMenuItemDanger .profileMenuItemHint {
+  color: var(--danger, #b94a3b);
+  opacity: 0.75;
+}
+
+.userAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.logout {
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  transition: color 160ms var(--ease),
+    border-color 160ms var(--ease),
+    background 160ms var(--ease);
+}
+
+.logout:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--paper);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.footer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 28px 28px 36px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 32px;
+}
+
+/* Decorative tri-rule above the colophon — same fleuron-broken
+   ornament as the page headers, scaled down. Reads like a printed
+   publication's colophon mark. */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(420px, 82%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 60%, transparent) 50%,
+    transparent 100%
+  );
+}
+
+.footer::after {
+  content: "✦";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  background: var(--bg);
+  padding: 0 8px;
+  font-size: 10px;
+  letter-spacing: 0;
+  opacity: 0.85;
+}
+
+.footerBrand {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 13.5px;
+  letter-spacing: -0.005em;
+}
+
+.footerDot {
+  color: var(--ink-4);
+}
+
+.footerMuted {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 860px) {
+  .headerInner {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "brand user"
+      "nav nav";
+    padding: 12px 18px;
+    gap: 14px;
+  }
+  .brand {
+    grid-area: brand;
+  }
+  .user {
+    grid-area: user;
+  }
+  .nav {
+    grid-area: nav;
+    justify-self: stretch;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .userName {
+    display: none;
+  }
+  .profileBtn {
+    padding: 4px;
+    gap: 4px;
+  }
+  .profileChevron {
+    margin-left: 0;
+  }
+  .notifPanel,
+  .profilePanel {
+    right: -12px;
+    width: calc(100vw - 32px);
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 520px) {
+  .navLink {
+    padding: 6px 12px;
+    font-size: 12.5px;
+  }
+  .footer {
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 18px 28px;
+  }
+}

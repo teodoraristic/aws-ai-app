@@ -1,0 +1,146 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  position: relative;
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      900px 500px at 80% -10%,
+      rgba(184, 92, 56, 0.1),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 420px at -10% 110%,
+      rgba(74, 124, 89, 0.08),
+      transparent 60%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.frame {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 440px;
+  animation: riseIn 520ms var(--ease) both;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand:hover {
+  border: none;
+  opacity: 0.9;
+}
+
+.brandWord {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.card {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 36px 36px 32px;
+  box-shadow: var(--shadow-3);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 12px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.titleDot {
+  color: var(--accent);
+}
+
+.subtitle {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 24px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.footer a {
+  color: var(--ink);
+  font-weight: 500;
+  border-bottom-color: var(--line-strong);
+}
+
+.footer a:hover {
+  border-bottom-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+.legal {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 26px 22px 24px;
+    border-radius: var(--radius-lg);
+  }
+  .title {
+    font-size: 1.7rem;
+  }
+}

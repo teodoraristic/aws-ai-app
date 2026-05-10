@@ -1,0 +1,20 @@
+{
+  "name": "uni-consultations-seed",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "seed": "node seed.mjs",
+    "seed:reset": "node seed.mjs --reset",
+    "seed:with-data": "node seed.mjs --with-data",
+    "seed:fresh": "node seed.mjs --reset --with-data",
+    "backfill:cancelled-by": "node backfill-cancelled-by.mjs",
+    "backfill:cancelled-by:apply": "node backfill-cancelled-by.mjs --apply"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.658.1",
+    "@aws-sdk/client-cognito-identity-provider": "^3.658.1",
+    "@aws-sdk/client-dynamodb": "^3.658.1",
+    "@aws-sdk/lib-dynamodb": "^3.658.1"
+  }
+}

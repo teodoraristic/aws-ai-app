@@ -1,0 +1,964 @@
+.page {
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 28px 60px;
+}
+
+.error {
+  margin: 18px 0 0;
+  padding: 10px 14px;
+  color: #8a2222;
+  background: rgba(138, 34, 34, 0.06);
+  border: 1px solid rgba(138, 34, 34, 0.18);
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+
+.skeleton {
+  margin: 24px 0;
+  padding: 24px;
+  color: var(--ink-3);
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Status hero card — used for pending and accepted states. The
+   data-status attribute lets us tweak accent colours per state. */
+.statusCard {
+  margin-top: 28px;
+  padding: 24px 26px 22px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--ink-3);
+  border-radius: var(--radius-lg, 12px);
+}
+
+.statusCard[data-status="pending"] {
+  border-left-color: #b48228;
+  background: rgba(180, 130, 40, 0.04);
+}
+
+.statusCard[data-status="accepted"] {
+  border-left-color: #2f7a4d;
+  background: rgba(60, 140, 90, 0.04);
+}
+
+.statusEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 6px;
+}
+
+.statusTitle {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--ink-1);
+  margin: 0 0 4px;
+}
+
+.statusDept {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 14px;
+}
+
+.statusHint {
+  margin: 14px 0 16px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  max-width: 64ch;
+  line-height: 1.55;
+}
+
+/* Theme excerpt — used inside both status cards and mentee cards. */
+.themeBox {
+  margin: 12px 0;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.themeLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 6px;
+}
+
+.themeBody {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-1);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Booking pill — shows the linked initial consultation under a status. */
+.bookingPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--paper-warm, rgba(0, 0, 0, 0.025));
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin: 6px 0 12px;
+}
+
+.bookingWhen {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-1);
+  letter-spacing: 0.04em;
+}
+
+.bookingMeta {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+/* Inline composer — re-used by withdraw + decline flows. */
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 14px;
+  background: var(--paper-warm, rgba(0, 0, 0, 0.025));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.composerLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.composerTextarea {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--ink-1);
+  padding: 8px 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  resize: vertical;
+}
+
+.composerTextarea:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.12);
+}
+
+.composerError {
+  margin: 0;
+  color: #8a2222;
+  font-size: 12.5px;
+}
+
+.composerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.composerCancel,
+.dangerOutline,
+.dangerSolid {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease);
+}
+
+.composerCancel {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+}
+
+.composerCancel:hover:not(:disabled) {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.03));
+}
+
+.dangerOutline {
+  background: transparent;
+  color: #8a2222;
+  border: 1px solid rgba(138, 34, 34, 0.3);
+}
+
+.dangerOutline:hover:not(:disabled) {
+  background: rgba(138, 34, 34, 0.06);
+  border-color: rgba(138, 34, 34, 0.5);
+  transform: translateY(-1px);
+}
+
+.dangerSolid {
+  background: #8a2222;
+  color: #fff;
+  border: 1px solid #8a2222;
+}
+
+.dangerSolid:hover:not(:disabled) {
+  background: #6f1c1c;
+  border-color: #6f1c1c;
+  transform: translateY(-1px);
+}
+
+.composerCancel:disabled,
+.dangerOutline:disabled,
+.dangerSolid:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Generic section wrapper used across propose flow + accepted view. */
+.section {
+  margin-top: 28px;
+  padding: 22px 24px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg, 12px);
+}
+
+.sectionTitle {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink-1);
+  margin: 0 0 12px;
+}
+
+.sectionEmpty {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.sectionError {
+  margin: 8px 0 0;
+  color: #8a2222;
+  font-size: 12.5px;
+}
+
+/* Professor picker grid. */
+.professorGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.profCard {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 200ms var(--ease), border-color 200ms var(--ease),
+    transform 200ms var(--ease);
+}
+
+.profCard:hover {
+  background: var(--paper);
+  border-color: var(--line-strong);
+  transform: translateY(-1px);
+}
+
+.profCardActive {
+  background: var(--paper);
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.12);
+}
+
+.profName {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-1);
+}
+
+.profDept {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.profSubjects {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+/* Slot list — shared between propose flow and accepted view. */
+.slotList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slotRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.slotWhen {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-1);
+  letter-spacing: 0.04em;
+}
+
+.slotMeta {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-2);
+  flex: 1;
+}
+
+.bookBtn,
+.bookBtnPrimary,
+.bookBtnGhost {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease);
+}
+
+.bookBtn {
+  background: transparent;
+  color: var(--ink-1);
+  border: 1px solid var(--line-strong);
+}
+
+.bookBtn:hover {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.03));
+  border-color: var(--ink-2);
+}
+
+.bookBtnPrimary {
+  background: var(--navy);
+  color: var(--paper);
+  border: 1px solid var(--navy);
+}
+
+.bookBtnPrimary:hover:not(:disabled) {
+  background: #0a1729;
+  border-color: #0a1729;
+  transform: translateY(-1px);
+}
+
+.bookBtnGhost {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+}
+
+.confirmInline {
+  display: inline-flex;
+  gap: 6px;
+}
+
+/* Theme textarea — used in propose flow. */
+.themeInput {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink-1);
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  resize: vertical;
+}
+
+.themeInput:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.12);
+}
+
+.submitBtn {
+  margin-top: 12px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 10px 18px;
+  background: var(--navy);
+  color: var(--paper);
+  border: 1px solid var(--navy);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), transform 160ms var(--ease);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #0a1729;
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* History list — used on accepted view + declined attempts. */
+.historyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.historyRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.historyWhen {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-1);
+}
+
+.historyKind {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* Professor view tabs. */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin: 24px 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tabBtn {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--ink-3);
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 200ms var(--ease), border-color 200ms var(--ease);
+}
+
+.tabBtn:hover {
+  color: var(--ink-1);
+}
+
+.tabBtnActive {
+  color: var(--ink-1);
+  border-bottom-color: var(--navy);
+}
+
+/* Mentee list (professor view). */
+.menteeList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menteeCard {
+  padding: 18px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg, 12px);
+}
+
+.menteeCard[data-status="pending"] {
+  border-left: 3px solid #b48228;
+}
+
+.menteeCard[data-status="accepted"] {
+  border-left: 3px solid #2f7a4d;
+}
+
+.menteeCard[data-status="declined"] {
+  border-left: 3px solid var(--line-strong);
+  opacity: 0.85;
+}
+
+.menteeHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.menteeName {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-1);
+}
+
+.menteeEmail {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.statusChip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--paper-warm, rgba(0, 0, 0, 0.04));
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+}
+
+.statusChip_pending {
+  background: rgba(180, 130, 40, 0.08);
+  color: #6c4a10;
+  border-color: rgba(180, 130, 40, 0.25);
+}
+
+.statusChip_accepted {
+  background: rgba(60, 140, 90, 0.1);
+  color: #1f4f33;
+  border-color: rgba(60, 140, 90, 0.3);
+}
+
+.statusChip_declined {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--ink-3);
+}
+
+.menteeMeta {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.menteeActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.acceptBtn,
+.declineBtn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), transform 160ms var(--ease);
+}
+
+.acceptBtn {
+  background: var(--navy);
+  color: var(--paper);
+  border: 1px solid var(--navy);
+}
+
+.acceptBtn:hover:not(:disabled) {
+  background: #0a1729;
+  transform: translateY(-1px);
+}
+
+.declineBtn {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+}
+
+.declineBtn:hover:not(:disabled) {
+  background: rgba(138, 34, 34, 0.06);
+  color: #8a2222;
+  border-color: rgba(138, 34, 34, 0.3);
+}
+
+.acceptBtn:disabled,
+.declineBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Section lead — used under section titles to give context.
+   ──────────────────────────────────────────────────────────────── */
+.sectionLead {
+  margin: -4px 0 14px;
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.55;
+  max-width: 64ch;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Slot pager — 4-at-a-time horizontal pagination.
+   ──────────────────────────────────────────────────────────────── */
+.pager {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pagerNav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.pagerArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink-1);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease), color 160ms var(--ease);
+}
+
+.pagerArrow:hover:not(:disabled) {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.04));
+  border-color: var(--navy);
+  color: var(--navy);
+  transform: translateY(-1px);
+}
+
+.pagerArrow:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pagerArrow:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+.pagerStatus {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  padding: 0 2px;
+}
+
+.pagerStatusOf {
+  color: var(--ink-3);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 2px;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Professor card — capacity chip.
+   ──────────────────────────────────────────────────────────────── */
+.profCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.capacityChip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 3px 8px 3px 9px;
+  background: rgba(60, 140, 90, 0.1);
+  border: 1px solid rgba(60, 140, 90, 0.28);
+  color: #1f4f33;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.capacityChipLabel {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Capacity card — professor's mentee cap dashboard.
+   ──────────────────────────────────────────────────────────────── */
+.capacityCard {
+  margin-top: 28px;
+  padding: 22px 24px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(60, 140, 90, 0.05) 0%,
+      rgba(255, 255, 255, 0) 60%
+    ),
+    var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid #2f7a4d;
+  border-radius: var(--radius-lg, 12px);
+}
+
+.capacityHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.capacityEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.capacityEditBtn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    color 160ms var(--ease);
+}
+
+.capacityEditBtn:hover {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.04));
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.capacityHero {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 4px 0 10px;
+}
+
+.capacityNumber {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 42px;
+  font-weight: 500;
+  color: var(--ink-1);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.capacitySlash {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 32px;
+  color: var(--ink-3);
+  line-height: 1;
+}
+
+.capacityMax {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 28px;
+  color: var(--ink-2);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.capacityUnit {
+  margin-left: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  align-self: center;
+}
+
+.capacityBar {
+  position: relative;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.capacityFill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #2f7a4d 0%, #4fa472 100%);
+  border-radius: 999px;
+  transition: width 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.capacityHint {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  max-width: 64ch;
+}
+
+.capacityEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 0;
+}
+
+.capacityLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.capacityInput {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  padding: 10px 12px;
+  width: 120px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--ink-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.capacityInput:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.12);
+}
+
+.capacityHelper {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Mentee card — accept/decline gate hint + status chip.
+   ──────────────────────────────────────────────────────────────── */
+.gateChip {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  padding: 2px 9px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  vertical-align: middle;
+}
+
+.gateChipWait {
+  background: rgba(180, 130, 40, 0.1);
+  color: #6c4a10;
+  border-color: rgba(180, 130, 40, 0.3);
+}
+
+.gateChipReady {
+  background: rgba(60, 140, 90, 0.12);
+  color: #1f4f33;
+  border-color: rgba(60, 140, 90, 0.3);
+}
+
+.menteeGateHint {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  background: rgba(180, 130, 40, 0.06);
+  border: 1px dashed rgba(180, 130, 40, 0.32);
+  border-radius: var(--radius);
+  font-size: 12.5px;
+  color: #6c4a10;
+  line-height: 1.5;
+}
+
+.menteeGateHint[data-tone="warn"] {
+  background: rgba(138, 34, 34, 0.05);
+  border-color: rgba(138, 34, 34, 0.3);
+  color: #6f1c1c;
+}

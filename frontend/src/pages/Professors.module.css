@@ -1,0 +1,1091 @@
+.page {
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 28px 60px;
+}
+
+/* Sub-section eyebrow used inside the slots panel — same shared
+   typography as the page header eyebrow (mono caps), but rendered
+   without the leading gold dot so it doesn't compete with the page
+   title. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 12px;
+}
+
+/* Slim, calm "you just reserved a session" toast under the toolbar. */
+.notice {
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  background: var(--sage-soft);
+  color: #244832;
+  border: 1px solid #b9d4bf;
+  border-left: 3px solid var(--sage);
+  border-radius: var(--radius);
+  font-size: 13.5px;
+  animation: riseIn 280ms var(--ease) both;
+}
+
+/* "Next available session" highlight that sits above the day groups. */
+.nextHint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.nextHintLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.nextHintBody {
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.panelSubjects {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin: 8px 0 0;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.search {
+  flex: 1;
+  position: relative;
+  max-width: 420px;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--ink-3);
+  pointer-events: none;
+}
+
+.searchInput {
+  padding-left: 38px !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  border-radius: 999px !important;
+}
+
+.count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.countLabel {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.roster {
+  min-width: 0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list li {
+  animation: riseIn 380ms var(--ease) both;
+}
+
+.card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  text-align: left;
+  transition: all 200ms var(--ease);
+}
+
+.card:hover {
+  background: var(--paper);
+  border-color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+.cardActive,
+.cardActive:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardActive .avatar {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: 15px;
+  font-weight: 500;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardMeta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.cardActive .cardMeta {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.cardDept {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.cardActive .cardDept {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cardChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.chip {
+  display: inline-flex;
+  padding: 2px 8px;
+  background: var(--bg-tint, rgba(0, 0, 0, 0.045));
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.cardActive .chip {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.chipMore {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  align-self: center;
+}
+
+.cardActive .chipMore {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Group-topic chips: live previews of what's currently being discussed in
+   group sessions on the next 14 days. Visually distinct from subject chips
+   (warm accent fill instead of neutral) so the eye reads them as "active /
+   joinable", not as another taxonomy of subjects. The label sits on its own
+   line so the grid of chips can wrap naturally without colliding with it. */
+.cardTopics {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.cardTopicsLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.cardActive .cardTopicsLabel {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cardTopicsChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.topicChip {
+  display: inline-flex;
+  padding: 2px 8px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--accent-deep);
+  white-space: nowrap;
+}
+
+.cardActive .topicChip {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Exam-prep variant for the per-card subject chips. Uses a softer sage
+   tone so it reads as different-but-related to the regular topic chip. */
+.topicChipPrep {
+  background: var(--sage-soft, #dde7df);
+  border-color: var(--sage-soft, #dde7df);
+  color: #2d4d36;
+}
+
+.cardActive .topicChipPrep {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Type chip on individual slot rows in the right panel. */
+.typeChip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.typeChipPrep {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border-color: var(--accent-soft);
+}
+
+.typeChipThesis {
+  background: var(--sage-soft, #dde7df);
+  color: #2d4d36;
+  border-color: var(--sage-soft, #dde7df);
+}
+
+.cardArrow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink-3);
+  transition: transform 200ms var(--ease), color 200ms var(--ease);
+}
+
+.card:hover .cardArrow {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+.cardActive .cardArrow {
+  color: var(--paper);
+}
+
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeletonCard {
+  height: 68px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 0%,
+    rgba(0, 0, 0, 0.07) 50%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1400ms ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.panel {
+  position: sticky;
+  top: 96px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 28px 28px 24px;
+  min-height: 320px;
+  box-shadow: var(--shadow-2);
+}
+
+.panelActive {
+  animation: riseIn 460ms var(--ease) both;
+}
+
+.panelEmpty {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 32px 8px;
+}
+
+.panelEmptyTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.panelEmptyHint {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.panelHead {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.panelLoading {
+  display: inline-flex;
+  gap: 6px;
+  padding: 16px 0;
+}
+
+.panelLoading span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: pulseSoft 1100ms var(--ease) infinite;
+}
+
+.panelLoading span:nth-child(2) {
+  animation-delay: 160ms;
+}
+.panelLoading span:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+.days {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.day {
+  animation: riseIn 380ms var(--ease) both;
+}
+
+.dayHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--line-strong);
+}
+
+.stamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  padding: 6px 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  line-height: 1;
+}
+
+.stampDay {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.stampMonth {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+.dayMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dayWeek {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.dayDate {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+
+.slots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Per-day slot pager — 4 slots visible at a time with prev/next
+   arrows. Replaces the old "render every slot inline" listing so
+   long days don't stretch the right rail to its full extent.
+   ──────────────────────────────────────────────────────────────── */
+.slotsPager {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slotsPagerNav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 2px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+}
+
+.slotsPagerArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink-1);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease), color 160ms var(--ease);
+}
+
+.slotsPagerArrow:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: var(--navy);
+  color: var(--navy);
+  transform: translateY(-1px);
+}
+
+.slotsPagerArrow:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.slotsPagerArrow:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+.slotsPagerStatus {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.slotsPagerStatusOf {
+  color: var(--ink-3);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 3px;
+}
+
+.slot {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: all 200ms var(--ease);
+}
+
+.slot:hover {
+  background: var(--paper);
+  border-color: var(--line-strong);
+}
+
+.slotTime {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.slotMid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.slotTopic {
+  font-size: 14px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slotPeople {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+/* State variants — left-border accent + matching badge color so state is
+   readable at a glance even with topic + capacity in the middle column.
+   Colors map to the academic palette: sage = available, gold = partially
+   booked, ink-3 = full / closed. */
+
+.stateFree {
+  border-left: 3px solid var(--sage);
+}
+
+.stateBooked {
+  border-left: 3px solid var(--accent);
+  background: rgba(239, 226, 194, 0.35);
+}
+
+.stateFull {
+  border-left: 3px solid var(--ink-3);
+  background: rgba(17, 32, 58, 0.03);
+  opacity: 0.82;
+}
+
+.slotMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* Square-ish, system-style badges — closer to a status tag in a faculty
+   portal than a rounded SaaS pill. */
+.stateBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.stateFreeBadge {
+  background: var(--sage-soft);
+  color: #244832;
+  border: 1px solid #b9d4bf;
+}
+
+.stateBookedBadge {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border: 1px solid #d8c08c;
+}
+
+.stateFullBadge {
+  background: rgba(17, 32, 58, 0.06);
+  color: var(--ink-3);
+  border: 1px solid var(--line-strong);
+}
+
+/* ── Reserve button (student-only, per slot) ───────────────────── */
+
+.reserveBtn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 7px 14px;
+  background: var(--navy);
+  color: var(--paper);
+  border: 1px solid var(--navy);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease);
+  white-space: nowrap;
+}
+
+.reserveBtn:hover:not(:disabled) {
+  background: #0a1729;
+  border-color: #0a1729;
+  transform: translateY(-1px);
+}
+
+.reserveBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.18);
+}
+
+.reserveBtnDisabled,
+.reserveBtn:disabled {
+  background: transparent;
+  color: var(--ink-3);
+  border-color: var(--line-strong);
+  cursor: not-allowed;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.reserveBtnDisabled:hover {
+  transform: none;
+}
+
+/* "Join waitlist" — softer than Reserve. Visually communicates "this is
+   a fallback action", not a primary one. Same shape so it still slots
+   into the row without breaking the rhythm. */
+.waitlistBtn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--ink-1);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease);
+  white-space: nowrap;
+}
+
+.waitlistBtn:hover {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.03));
+  border-color: var(--ink-2);
+  transform: translateY(-1px);
+}
+
+.waitlistBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.18);
+}
+
+/* Inline confirm panel that drops below a slot row when the student
+   opens the join-waitlist flow. Spans the full slot width and just
+   confirms intent; the waitlist is notify-only. */
+.waitlistComposer {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 12px 14px;
+  background: var(--paper-warm, rgba(0, 0, 0, 0.025));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.waitlistHint {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.waitlistError {
+  margin: 0;
+  color: #8a2222;
+  font-size: 12.5px;
+}
+
+.waitlistActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.waitlistCancel,
+.waitlistConfirm {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease),
+    transform 160ms var(--ease);
+}
+
+.waitlistCancel {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+}
+
+.waitlistCancel:hover:not(:disabled) {
+  background: var(--paper-warm, rgba(0, 0, 0, 0.03));
+}
+
+.waitlistConfirm {
+  background: var(--navy);
+  color: var(--paper);
+  border: 1px solid var(--navy);
+}
+
+.waitlistConfirm:hover:not(:disabled) {
+  background: #0a1729;
+  border-color: #0a1729;
+  transform: translateY(-1px);
+}
+
+.waitlistConfirm:disabled,
+.waitlistCancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.panelDept {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 6px 0 0;
+}
+
+.panelHint {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 8px;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.emptyTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.error {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #e8b8b8;
+  border-radius: var(--radius);
+  font-size: 13.5px;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .panel {
+    position: static;
+  }
+}
+
+@media (max-width: 540px) {
+  .page {
+    padding: 28px 18px 60px;
+  }
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .search {
+    max-width: none;
+  }
+  .count {
+    align-self: flex-end;
+  }
+  .panel {
+    padding: 22px 18px 18px;
+  }
+  .slot {
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: auto auto;
+    row-gap: 4px;
+  }
+  .stateBadge {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* ── Capacity editor ──────────────────────────────────────────────── */
+
+.slotEditing {
+  background: var(--paper) !important;
+  border-color: var(--ink) !important;
+  grid-template-columns: 64px 1fr auto !important;
+}
+
+.expandBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 180ms var(--ease);
+  opacity: 0;
+}
+
+.slot:hover .expandBtn {
+  opacity: 1;
+}
+
+.expandBtn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--paper);
+  transform: scale(1.08);
+}
+
+.capacityEditor {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  animation: riseIn 180ms var(--ease) both;
+}
+
+.capacityLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.capacityInput {
+  width: 56px;
+  padding: 5px 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  text-align: center;
+  outline: none;
+  transition: border-color 150ms var(--ease);
+}
+
+.capacityInput:focus {
+  border-color: var(--accent);
+}
+
+.capacityInput::-webkit-inner-spin-button,
+.capacityInput::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+.capacitySave {
+  padding: 5px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 150ms var(--ease), transform 150ms var(--ease);
+}
+
+.capacitySave:hover:not(:disabled) {
+  opacity: 0.82;
+  transform: translateY(-1px);
+}
+
+.capacitySave:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.capacityCancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-size: 13px;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 150ms var(--ease);
+  flex-shrink: 0;
+}
+
+.capacityCancel:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.capacityCancel:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -1,0 +1,312 @@
+.section {
+  margin-top: 36px;
+  padding: 24px 26px 22px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg, 12px);
+}
+
+.header {
+  margin-bottom: 14px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 6px;
+}
+
+.title {
+  font-family: var(--font-serif, var(--font-sans));
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink-1);
+  margin: 0 0 6px;
+}
+
+.lead {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 60ch;
+}
+
+.error {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  color: #8a2222;
+  background: rgba(138, 34, 34, 0.06);
+  border: 1px solid rgba(138, 34, 34, 0.18);
+  border-radius: var(--radius);
+  font-size: 12.5px;
+}
+
+.list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Each row is now a vertical stack so the seat-opened banner can sit
+   atop the regular row body. We still hide the banner div entirely
+   when no notification matches, so a "quiet" row visually collapses
+   back to the original single-line layout. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: background 200ms var(--ease), border-color 200ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+
+.row:hover {
+  background: var(--paper);
+}
+
+.rowBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* "A seat just opened" state. Uses the same sage accent the calendar
+   uses for "spare capacity" pips, so the visual language is consistent
+   across the app — sage = available right now, neutral = waiting. */
+.rowAlert {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sage-soft, #d6e7d6) 70%, var(--paper)) 0%,
+    var(--paper) 65%
+  );
+  border-color: color-mix(in srgb, var(--sage, #5a8c6a) 40%, var(--line));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--sage, #5a8c6a) 18%, transparent),
+    0 8px 22px -16px color-mix(in srgb, var(--sage, #5a8c6a) 65%, transparent);
+}
+
+.alertBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 4px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #2f5b3e;
+}
+
+.alertText {
+  line-height: 1.45;
+}
+
+.alertText strong {
+  font-weight: 600;
+  color: #1f4530;
+  letter-spacing: 0.005em;
+}
+
+/* Live indicator: a solid dot with a soft expanding ring behind it.
+   The ring pulses to draw the eye but the dot stays steady so it
+   doesn't read as "loading" or "broken". */
+.alertPulse {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.alertDot {
+  position: relative;
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sage, #5a8c6a);
+  box-shadow: 0 0 0 1.5px var(--paper);
+}
+
+.alertRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--sage, #5a8c6a);
+  opacity: 0.4;
+  animation: waitlistPulse 1800ms ease-out infinite;
+}
+
+@keyframes waitlistPulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alertRing {
+    animation: none;
+    opacity: 0;
+  }
+  .row {
+    transition: none;
+  }
+}
+
+.rowMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.when {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-1);
+  letter-spacing: 0.04em;
+}
+
+.who {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.who strong {
+  color: var(--ink-1);
+  font-weight: 500;
+}
+
+.topic {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+.typeChip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--paper-warm, rgba(0, 0, 0, 0.04));
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+}
+
+.typeChipPrep {
+  background: rgba(180, 130, 40, 0.08);
+  color: #6c4a10;
+  border-color: rgba(180, 130, 40, 0.25);
+}
+
+.typeChipThesis {
+  background: rgba(60, 110, 160, 0.08);
+  color: #1f3f63;
+  border-color: rgba(60, 110, 160, 0.25);
+}
+
+/* Action cluster — keeps Reserve and Leave next to each other and on a
+   single line on every viewport. Reserve is the primary call-to-action
+   (filled sage) and only renders when the seat is actually open, so
+   when present it's pulling all of the visual weight. */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.reserveBtn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 14px;
+  background: var(--sage, #5a8c6a);
+  color: var(--paper, #fff);
+  border: 1px solid var(--sage, #5a8c6a);
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 160ms var(--ease), transform 160ms var(--ease),
+    box-shadow 160ms var(--ease);
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--sage, #5a8c6a) 70%, transparent);
+}
+
+.reserveBtn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--sage, #5a8c6a) 88%, #000);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--sage, #5a8c6a) 70%, transparent);
+}
+
+.reserveBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.reserveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.leaveBtn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 160ms var(--ease), color 160ms var(--ease);
+  white-space: nowrap;
+}
+
+.leaveBtn:hover:not(:disabled) {
+  background: rgba(138, 34, 34, 0.06);
+  color: #8a2222;
+  border-color: rgba(138, 34, 34, 0.3);
+}
+
+.leaveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* On narrower viewports stack the row body so the Reserve / Leave
+   cluster doesn't crush the slot details. The alert banner already
+   wraps gracefully thanks to its flex layout. */
+@media (max-width: 640px) {
+  .rowBody {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .actions {
+    justify-content: flex-end;
+  }
+}

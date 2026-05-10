@@ -1,0 +1,583 @@
+.wrap {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  pointer-events: none;
+}
+
+.wrap > * {
+  pointer-events: auto;
+}
+
+/* ── Floating action button (FAB) ────────────────────────────── */
+
+.fab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px 11px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--ink) 0%, #1d2c4a 100%);
+  color: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 22px 44px -18px rgba(17, 32, 58, 0.55),
+    0 8px 20px -10px rgba(17, 32, 58, 0.45);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition:
+    transform 200ms var(--ease),
+    background 200ms var(--ease),
+    box-shadow 200ms var(--ease),
+    border-color 200ms var(--ease);
+}
+
+.fab:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #0d1a2f 0%, #25365a 100%);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.1) inset,
+    0 28px 52px -18px rgba(17, 32, 58, 0.65),
+    0 0 0 4px rgba(160, 113, 37, 0.12);
+}
+
+.fab:focus-visible {
+  outline: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.1) inset,
+    0 28px 52px -18px rgba(17, 32, 58, 0.65),
+    0 0 0 4px rgba(160, 113, 37, 0.35);
+}
+
+.fabActive {
+  background: linear-gradient(135deg, var(--accent-deep) 0%, #855c1a 100%);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.fabActive:hover {
+  background: linear-gradient(135deg, #5e4110 0%, #765019 100%);
+}
+
+.fabIconWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fabPing {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 2px var(--ink),
+    0 0 0 4px rgba(160, 113, 37, 0.35);
+  animation: ping 1.4s var(--ease) infinite;
+}
+
+@keyframes ping {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.25); opacity: 0.8; }
+}
+
+.fabLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ── Panel ───────────────────────────────────────────────────── */
+
+.panel {
+  width: min(400px, calc(100vw - 32px));
+  height: min(620px, calc(100vh - 120px));
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 30px 80px -28px rgba(17, 32, 58, 0.45),
+    0 12px 32px -16px rgba(17, 32, 58, 0.3);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  animation: panelIn 240ms var(--ease) both;
+  transform-origin: bottom right;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+
+/* Compact masthead: navy/gold crest (carrying a sage availability pip)
+   + serif title, with a thin gold banner stripe at the top to echo the
+   global Layout header. The previous two-line "ACADEMIC ASSISTANT / Hi,
+   Luka" stack was over-personal and ate vertical space; this collapses
+   identity into one dignified row. */
+
+.head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px 12px;
+  background:
+    linear-gradient(180deg, rgba(17, 32, 58, 0.04) 0%, rgba(17, 32, 58, 0) 100%),
+    var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Gold institutional band at the very top of the panel header — same
+   visual language as the gold stripe on the global app header. */
+.head::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 22%,
+    var(--accent-bright, var(--accent)) 50%,
+    var(--accent) 78%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+.headLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+/* Navy crest with a gold serif "A" monogram and a small sage availability
+   pip in the lower-right corner. Mirrors the BrandMark crest language so
+   the floating widget reads as part of the same publication. */
+.crest {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--ink) 0%, #1d2c4a 100%);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 8px 18px -10px rgba(17, 32, 58, 0.55);
+}
+
+.crest::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sage);
+  box-shadow: 0 0 0 2px var(--paper);
+  animation: pulseSoft 2400ms var(--ease) infinite;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16.5px;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.headActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  transition:
+    color 160ms var(--ease),
+    border-color 160ms var(--ease),
+    background 160ms var(--ease);
+}
+
+.linkBtn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: rgba(26, 31, 46, 0.03);
+}
+
+.linkBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.linkBtnIcon {
+  margin-bottom: 1px;
+  opacity: 0.8;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-3);
+  border: 1px solid transparent;
+  transition: color 160ms var(--ease), background 160ms var(--ease);
+}
+
+.iconBtn:hover {
+  color: var(--ink);
+  background: rgba(26, 31, 46, 0.06);
+}
+
+/* ── Body / messages ────────────────────────────────────────── */
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 0;
+  scroll-behavior: smooth;
+}
+
+.body::-webkit-scrollbar {
+  width: 5px;
+}
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.body::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 4px;
+}
+
+/* ── Empty state / suggestions ──────────────────────────────── */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: riseIn 360ms var(--ease) both;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+.emptyHint {
+  margin: 0 0 4px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+.suggestions {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestions li {
+  animation: riseIn 360ms var(--ease) both;
+}
+
+.suggestion {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 13px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.4;
+  transition: all 180ms var(--ease);
+}
+
+.suggestion:hover {
+  background: var(--paper);
+  border-color: var(--ink);
+  color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-1);
+}
+
+.suggestionMark {
+  color: var(--accent);
+  font-weight: 500;
+  width: 14px;
+  display: inline-flex;
+  justify-content: center;
+  transition: transform 180ms var(--ease);
+}
+
+.suggestion:hover .suggestionMark {
+  transform: translateX(3px);
+}
+
+/* ── Message bubbles ────────────────────────────────────────── */
+
+.msgUser,
+.msgAssistant {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  animation: riseIn 240ms var(--ease) both;
+}
+
+.msgUser {
+  align-items: flex-end;
+}
+
+.msgRole {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.msgUser .msgRole {
+  color: var(--accent-deep);
+}
+
+.msgBody {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.msgAssistant .msgBody {
+  border-left: 2px solid var(--line-strong);
+  padding: 2px 0 2px 12px;
+}
+
+.msgUser .msgBody {
+  background: linear-gradient(135deg, var(--ink) 0%, #1d2c4a 100%);
+  color: var(--paper);
+  padding: 9px 13px;
+  border-radius: 14px;
+  border-bottom-right-radius: 4px;
+  max-width: 88%;
+  box-shadow: var(--shadow-1);
+}
+
+.typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 5px 0 5px 12px;
+  border-left: 2px solid var(--line-strong);
+}
+
+.typing span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: pulseSoft 1100ms var(--ease) infinite;
+}
+
+.typing span:nth-child(2) { animation-delay: 160ms; }
+.typing span:nth-child(3) { animation-delay: 320ms; }
+
+/* ── Picks (clickable choices) ──────────────────────────────── */
+
+.picks {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  animation: riseIn 320ms var(--ease) both;
+}
+
+.pick {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 12.5px;
+  line-height: 1.3;
+  transition:
+    border-color 160ms var(--ease),
+    background 160ms var(--ease),
+    color 160ms var(--ease),
+    transform 160ms var(--ease);
+}
+
+.pick:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  transform: translateY(-1px);
+}
+
+.pick:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Error ──────────────────────────────────────────────────── */
+
+.error {
+  padding: 9px 12px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #e8b8b8;
+  border-radius: var(--radius);
+  font-size: 12.5px;
+}
+
+/* ── Composer ──────────────────────────────────────────────── */
+
+.composer {
+  border-top: 1px solid var(--line);
+  padding: 12px 12px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  background:
+    linear-gradient(0deg, rgba(17, 32, 58, 0.025) 0%, rgba(17, 32, 58, 0) 100%),
+    var(--paper);
+}
+
+.input {
+  flex: 1;
+  border: 1px solid var(--line) !important;
+  background: var(--paper) !important;
+  border-radius: 14px;
+  padding: 10px 12px !important;
+  resize: none;
+  min-height: 38px;
+  max-height: 140px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  transition: border-color 160ms var(--ease), box-shadow 160ms var(--ease);
+}
+
+.input:focus {
+  border-color: var(--ink) !important;
+  box-shadow: 0 0 0 3px rgba(17, 32, 58, 0.08) !important;
+}
+
+.send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  flex-shrink: 0;
+  transition:
+    background 160ms var(--ease),
+    transform 160ms var(--ease),
+    opacity 160ms var(--ease);
+}
+
+.send:hover:not(:disabled) {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.send:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .wrap {
+    right: 12px;
+    bottom: 12px;
+  }
+  .panel {
+    width: min(360px, calc(100vw - 24px));
+    height: min(72vh, 560px);
+  }
+  .fab {
+    padding: 10px 16px 10px 12px;
+  }
+  .fabLabel {
+    display: none;
+  }
+}

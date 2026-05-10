@@ -1,0 +1,219 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.input {
+  font-size: 15px;
+  padding: 12px 14px !important;
+  border-radius: var(--radius) !important;
+  background: var(--paper) !important;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.hintInline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.error {
+  padding: 12px 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #e8b8b8;
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.notice {
+  padding: 12px 14px;
+  background: var(--sage-soft);
+  color: #2f5b3e;
+  border: 1px solid #c1d3c5;
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.submit {
+  margin-top: 4px;
+  width: 100%;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  transition: transform 180ms var(--ease), background 180ms var(--ease),
+    opacity 180ms var(--ease);
+}
+
+.submit:hover:not(:disabled) {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.linkRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.linkAction {
+  background: none;
+  border: none;
+  color: var(--ink-2);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 160ms var(--ease), border-color 160ms var(--ease);
+}
+
+.linkAction:hover:not(:disabled) {
+  color: var(--accent-deep);
+  border-bottom-color: var(--accent);
+}
+
+.linkAction:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* Role segmented selector */
+
+.roleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roleOptions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 4px;
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.roleOption {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  text-align: left;
+  cursor: pointer;
+  transition: background 180ms var(--ease), border-color 180ms var(--ease),
+    color 180ms var(--ease);
+}
+
+.roleOption:hover:not(.roleOptionActive) {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.roleOptionActive {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  box-shadow: var(--shadow-2);
+}
+
+.roleLabel {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: -0.01em;
+}
+
+.roleHint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.roleOptionActive .roleHint {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.roleDot {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 180ms var(--ease);
+}
+
+.roleOptionActive .roleDot {
+  opacity: 1;
+}
+
+/* Code input grid for /confirm */
+
+.codeRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.codeBox {
+  text-align: center !important;
+  font-family: var(--font-mono) !important;
+  font-size: 22px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  padding: 12px 0 !important;
+  caret-color: var(--accent);
+}
+
+@media (max-width: 420px) {
+  .codeRow {
+    gap: 6px;
+  }
+  .codeBox {
+    font-size: 18px !important;
+    padding: 10px 0 !important;
+  }
+}

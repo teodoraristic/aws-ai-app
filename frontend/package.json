@@ -1,0 +1,24 @@
+{
+  "name": "uni-consultations-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "sync-env": "node scripts/sync-env.mjs",
+    "build": "npm run sync-env && vite build",
+    "preview": "vite preview",
+    "deploy": "node scripts/deploy.mjs"
+  },
+  "dependencies": {
+    "aws-amplify": "^6.16.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.3",
+    "vite": "^5.4.10"
+  }
+}
