@@ -231,6 +231,8 @@ export default function Professors() {
   const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
   const [waitlistError, setWaitlistError] = useState("");
 
+  const [dayPage, setDayPage] = useState(0);
+
   const [editingSlotId, setEditingSlotId] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [editSaving, setEditSaving] = useState(false);
@@ -396,6 +398,7 @@ export default function Professors() {
   async function pick(p) {
     setSelected(p);
     setSlots([]);
+    setDayPage(0);
     setError("");
     setSlotsLoading(true);
     try {
@@ -417,16 +420,19 @@ export default function Professors() {
     const q = query.trim().toLowerCase();
     if (!q) return professors;
     return professors.filter((p) => {
+      const groupInfo = groupInfoByProfId.get(p.professorId) || { topics: [], examPrep: [] };
       const haystack = [
         p.name || "",
         p.department || "",
         ...(p.subjects || []),
+        ...(groupInfo.topics || []),
+        ...(groupInfo.examPrep || []).map((e) => e.subject || ""),
       ]
         .join(" ")
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [professors, query]);
+  }, [professors, query, groupInfoByProfId]);
 
   const grouped = useMemo(() => {
     const map = new Map();
@@ -765,8 +771,40 @@ export default function Professors() {
                 </div>
               )}
 
+              {grouped.length > 1 && (
+                <div className={styles.dayPagerNav}>
+                  <button
+                    type="button"
+                    className={styles.slotsPagerArrow}
+                    onClick={() => setDayPage((p) => Math.max(0, p - 1))}
+                    disabled={dayPage === 0}
+                    aria-label="Previous day"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <span className={styles.slotsPagerStatus}>
+                    {dayPage + 1}
+                    <span className={styles.slotsPagerStatusOf}>of</span>
+                    {grouped.length}
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.slotsPagerArrow}
+                    onClick={() => setDayPage((p) => Math.min(grouped.length - 1, p + 1))}
+                    disabled={dayPage >= grouped.length - 1}
+                    aria-label="Next day"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+
               <div className={styles.days}>
-                {grouped.map(([date, daySlots]) => (
+                {grouped.slice(dayPage, dayPage + 1).map(([date, daySlots]) => (
                   <article key={date} className={styles.day}>
                     <header className={styles.dayHead}>
                       <div className={styles.stamp}>

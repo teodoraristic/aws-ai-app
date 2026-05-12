@@ -17,7 +17,6 @@ const {
   bookSlotCore,
   getMyConsultations,
   createNotification,
-  combineSlotInstantUtc,
   normalizeMaxMentees,
 } = require("/opt/nodejs/consultations");
 const {
@@ -481,15 +480,8 @@ async function patchMentee(event, context, log, caller) {
         "Ask the student to re-book or restore the booking before deciding."
     );
   }
-  const initialInstant = combineSlotInstantUtc(
-    initialConsultation.date,
-    initialConsultation.time
-  );
-  if (
-    !initialInstant ||
-    !Number.isFinite(initialInstant.getTime()) ||
-    initialInstant.getTime() > Date.now()
-  ) {
+  const todayUtc = new Date().toISOString().slice(0, 10);
+  if (initialConsultation.date > todayUtc) {
     return badRequest(
       "Can't decide yet: the initial consultation hasn't taken place. " +
         "You can accept or decline once the meeting on " +

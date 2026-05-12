@@ -554,6 +554,16 @@
    arrows. Replaces the old "render every slot inline" listing so
    long days don't stretch the right rail to its full extent.
    ──────────────────────────────────────────────────────────────── */
+.dayPagerNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
 .slotsPager {
   display: flex;
   flex-direction: column;

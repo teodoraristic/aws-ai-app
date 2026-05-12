@@ -1,26 +1,3 @@
-#!/usr/bin/env node
-//
-// Seed Cognito + DynamoDB with fake users (and optionally slots/consultations)
-// so we can hit the running stack with realistic data without clicking through
-// the sign-up flow N times.
-//
-// Usage:
-//   npm install                    (once, in this folder)
-//   npm run seed                   create users, idempotent
-//   npm run seed:reset             delete previously seeded users + rows, then seed
-//   npm run seed:with-data         seed users + slots + sample bookings
-//   npm run seed:fresh             reset + users + data (most useful for E2E demos)
-//
-// Auth: uses your default AWS credential chain (e.g. AWS CLI profile).
-// Region defaults to eu-west-1, override with AWS_REGION.
-//
-// Why we don't go through Cognito self-signup:
-//   AdminCreateUser is idempotent and instant, doesn't send emails, and lets
-//   us set a permanent password so the user can sign in immediately. The
-//   downside is that the PostConfirmation Lambda doesn't fire for AdminCreate,
-//   so the script writes the USER#<sub>/PROFILE row itself, mirroring what
-//   auth-post-confirmation/handler.js does on real signup.
-
 import { randomUUID } from "node:crypto";
 import {
   CloudFormationClient,
@@ -86,10 +63,7 @@ const PROFESSORS = [
 
 const STUDENTS = [
   { email: "luka.simic@example.edu", displayName: "Luka Simić" },
-  { email: "milica.djordjevic@example.edu", displayName: "Milica Đorđević" },
-  { email: "stefan.popovic@example.edu", displayName: "Stefan Popović" },
   { email: "jovana.markovic@example.edu", displayName: "Jovana Marković" },
-  { email: "filip.ilic@example.edu", displayName: "Filip Ilić" },
 ];
 
 // Admins are seeded only when --with-data is passed (or via the explicit
@@ -127,10 +101,9 @@ const STUDENT_NOTES = [
 // Mixing types per day gives every analytics chart non-trivial buckets.
 const SLOT_TEMPLATES = [
   { time: "09:00", type: "general",   max: 1, hasSubject: false },
-  { time: "09:30", type: "general",   max: 3, hasSubject: false },
   { time: "10:00", type: "exam_prep", max: 3, hasSubject: true  },
   { time: "10:30", type: "thesis",    max: 1, hasSubject: false },
-  { time: "11:00", type: "general",   max: 1, hasSubject: false },
+  { time: "11:00", type: "general",   max: 3, hasSubject: false },
 ];
 
 // Thesis mentorship fixtures. One row per status branch the chat /
@@ -141,35 +114,14 @@ const SLOT_TEMPLATES = [
 // matching consultation — the student withdrew before a session.
 const MENTORSHIPS = [
   {
-    studentIdx: 2, // Stefan Popović
-    professorIdx: 0, // Ana Petrović
-    status: "accepted",
-    theme:
-      "Optimizing CI build pipelines for a monorepo web app: caching, " +
-      "incremental builds, and dependency-graph-aware test selection.",
-    attempt: 1,
-    initialDaysAgo: 14, // initial consultation already happened
-    decidedDaysAgo: 10, // professor accepted shortly after
-  },
-  {
     studentIdx: 0, // Luka Simić
-    professorIdx: 1, // Marko Jovanović
+    professorIdx: 0, // Ana Petrović
     status: "pending",
     theme:
-      "Lock-free data structures for distributed key-value stores under " +
-      "high write contention.",
+      "Real-time collaborative editing using CRDTs: conflict resolution " +
+      "and consistency guarantees in distributed document systems.",
     attempt: 1,
-    initialDaysAhead: 5, // initial consultation upcoming
-  },
-  {
-    studentIdx: 1, // Milica Đorđević
-    professorIdx: 2, // Ivana Nikolić
-    status: "declined",
-    theme:
-      "Schema evolution strategies in document databases without downtime.",
-    attempt: 1,
-    declineReason: "Outside my current research focus, sorry!",
-    decidedDaysAgo: 2,
+    initialDaysAgo: 2, // initial consultation was May 9, professor hasn't decided yet
   },
 ];
 
@@ -310,7 +262,7 @@ function buildSlotsForProfessor(professorRecord) {
   const examSubject = (fixture.subjects && fixture.subjects[0]) || "";
 
   const items = [];
-  for (let offset = -14; offset <= 14; offset++) {
+  for (let offset = -7; offset <= 7; offset++) {
     if (offset === 0) continue;
     const date = isoDate(offset);
     for (const tpl of SLOT_TEMPLATES) {
@@ -488,7 +440,7 @@ async function seedSampleBookings(tableName, professorRecords, studentRecords) {
 
   const todayIso = new Date().toISOString().slice(0, 10);
   const bookingsToWrite = [];
-  const TOTAL = 32;
+  const TOTAL = 12;
   const CANCEL_RATE = 0.18;
 
   let attempts = 0;
@@ -843,6 +795,80 @@ async function seedMentorships(tableName, professorRecords, studentRecords) {
   log("mentorships", "seeded", { mentorshipCount, thesisConsultations });
 }
 
+// Seed one fully-booked 1-on-1 general slot for Ana Petrović (professorIdx 0)
+// booked by Luka Simić (studentIdx 0), 3 days from now at 09:00.
+// This gives the demo a "Full capacity" slot so the waitlist flow can be shown
+// (Jovana Marković sees "Join waitlist" on that slot).
+async function seedWaitlistDemo(tableName, professorRecords, studentRecords) {
+  const prof = professorRecords[0]; // Ana Petrović
+  const stud = studentRecords[0];   // Luka Simić
+  if (!prof || !stud) return;
+
+  const date = isoDate(3);
+  const slotSK = `SLOT#${date}T09:00`;
+
+  const slotResp = await ddb.send(
+    new QueryCommand({
+      TableName: tableName,
+      KeyConditionExpression: "PK = :pk AND SK = :sk",
+      ExpressionAttributeValues: {
+        ":pk": `PROFESSOR#${prof.sub}`,
+        ":sk": slotSK,
+      },
+    })
+  );
+  const slot = (slotResp.Items || [])[0];
+  if (!slot) {
+    console.warn("[waitlist-demo] slot not found, skipping", { slotSK });
+    return;
+  }
+
+  // Mark slot full.
+  await ddb.send(
+    new PutCommand({
+      TableName: tableName,
+      Item: {
+        ...slot,
+        status: "full",
+        currentParticipants: 1,
+        GSI1PK: "SLOT_STATUS#full",
+        seedTag: SEED_TAG,
+      },
+    })
+  );
+
+  // Write the consultation row for Luka.
+  const consultationId = randomUUID();
+  await ddb.send(
+    new PutCommand({
+      TableName: tableName,
+      Item: {
+        PK: `CONSULTATION#${consultationId}`,
+        SK: "METADATA",
+        GSI1PK: `PROFESSOR#${prof.sub}`,
+        GSI1SK: `DATE#${date}T09:00`,
+        GSI2PK: `STUDENT#${stud.sub}`,
+        GSI2SK: `DATE#${date}T09:00`,
+        consultationId,
+        studentId: stud.sub,
+        professorId: prof.sub,
+        slotSK,
+        date,
+        time: "09:00",
+        topic: "SQL injections and prepared statements",
+        note: "SQL injections and prepared statements",
+        consultationType: "general",
+        status: "booked",
+        isGroupSession: false,
+        seedTag: SEED_TAG,
+        createdAt: new Date().toISOString(),
+      },
+    })
+  );
+
+  log("waitlist-demo", "seeded full 1-on-1 slot for waitlist demo", { date, slotSK });
+}
+
 // Tiny seedable PRNG so re-running the script yields stable bookings.
 // Picked over Math.random() so tests / demos see comparable numbers.
 function mulberry32(seed) {
@@ -1019,6 +1045,7 @@ async function main() {
     // along with their initial consultations + slot-state flips so the
     // chat thesis flow has every branch represented.
     await seedMentorships(tableName, professorRecords, studentRecords);
+    await seedWaitlistDemo(tableName, professorRecords, studentRecords);
   }
 
   console.log("\nDone. Sign in with any seeded user:");
